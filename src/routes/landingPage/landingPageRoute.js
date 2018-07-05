@@ -1,5 +1,5 @@
 import React from 'react'
-import Register from '../../components/register/registerComponent'
+// import Register from '../../components/register/registerComponent'
 import ProductDescription from '../../components/productDescription/productDescriptionComponent'
 import Header from '../../components/header/headerComponent'
 import FooterComponent from '../../components/footer/footerComponent'
@@ -17,7 +17,7 @@ class LandingPageRoute extends React.Component {
           <h1 className='display-2'>Composer Bla Bla ...............</h1>
           <div className='row'>
             <ProductDescription />
-            <Register />
+            {/* <Register /> */}
           </div>
         </div>
       </div>
