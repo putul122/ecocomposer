@@ -10,7 +10,7 @@ class Components extends React.Component {
             <h2> Components</h2>
           </div>
           <div className='col-md-8'>
-            <input type='text' placeholder='Search..' name='search' className= ' space' />
+            <input type='text' placeholder='Search..' name='search' className=' space' />
             <button type='submit'><i className='fa fa-search' /></button><br />
           </div>
         </div>
