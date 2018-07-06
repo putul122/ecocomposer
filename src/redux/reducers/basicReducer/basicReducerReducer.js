@@ -2,6 +2,7 @@ import { createAction, handleActions } from 'redux-actions'
 import { FETCH_BASIC_SUCCESS } from '../../sagas/basic/basicSaga'
 import { FETCH_CREATE_USER_SUCCESS } from '../../sagas/register/registerSaga'
 import { FETCH_REGISTER_PROCESS_SUCCESS } from '../../sagas/registerProcess/registerProcessSaga'
+import { FETCH_COMPONENT_SUCCESS } from '../../sagas/componentType/componentTypeSaga'
 // Name Spaced Action Types
 const INCREMENT = 'BasicReducer/INCREMENT'
 const DECREMENT = 'BasicReducer/DECREMENT'
@@ -17,7 +18,8 @@ export const actions = {
   ABACUS_FILE_PROVISIONED,
   COMPOSER_MODEL_CONNECTED,
   FETCH_CREATE_USER_SUCCESS,
-  FETCH_REGISTER_PROCESS_SUCCESS
+  FETCH_REGISTER_PROCESS_SUCCESS,
+  FETCH_COMPONENT_SUCCESS
 }
 
 export const actionCreators = {
@@ -37,7 +39,8 @@ export const initialState = {
   registerProcessStatus: '',
   createAccountApi: '', // Currntly not used, will be using if we are getting this api from another api call
   token: '',
-  registerProcessApi: '' // Currntly not used, will be using if we are getting this api from another api call
+  registerProcessApi: '', // Currntly not used, will be using if we are getting this api from another api call
+  componentTypes: ''
 }
 
 export default handleActions(
@@ -73,6 +76,10 @@ export default handleActions(
     [FETCH_REGISTER_PROCESS_SUCCESS]: (state, action) => ({
       ...state,
       registerProcessStatus: action.payload
+    }),
+    [FETCH_COMPONENT_SUCCESS]: (state, action) => ({
+      ...state,
+      componentTypes: action.payload
     })
   },
   initialState

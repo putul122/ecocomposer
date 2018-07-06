@@ -1,5 +1,6 @@
 import React from 'react'
-import Components from '../../components/components/componentsComponent'
+// import Components from '../../components/components/componentsComponent'
+import ComponentType from '../../containers/componentType/componentTypeContainer'
 import LeftNavigation from '../../components/leftNavigation/leftNavComponent'
 import FooterComponent from '../../components/footer/footerComponent'
 // import { Breadcrumb, BreadcrumbItem } from 'react-bootstrap'
@@ -14,7 +15,7 @@ class ComponentsPageRoute extends React.Component {
         <div className='m-content'>
           <div className='row'>
             <div className='col-md-8'>
-              <Components />
+              <ComponentType />
             </div>
           </div>
         </div>
