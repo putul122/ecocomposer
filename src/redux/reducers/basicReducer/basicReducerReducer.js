@@ -2,13 +2,15 @@ import { createAction, handleActions } from 'redux-actions'
 import { FETCH_BASIC_SUCCESS } from '../../sagas/basic/basicSaga'
 import { FETCH_CREATE_USER_SUCCESS } from '../../sagas/register/registerSaga'
 import { FETCH_REGISTER_PROCESS_SUCCESS } from '../../sagas/registerProcess/registerProcessSaga'
-import { FETCH_COMPONENT_SUCCESS } from '../../sagas/componentType/componentTypeSaga'
+import { FETCH_COMPONENT_SUCCESS, SEARCH_COMPONENT_SUCCESS } from '../../sagas/componentType/componentTypeSaga'
 // Name Spaced Action Types
 const INCREMENT = 'BasicReducer/INCREMENT'
 const DECREMENT = 'BasicReducer/DECREMENT'
 const ACCOUNT_CREATION = 'BasicReducer/ACCOUNT_CREATION'
 const ABACUS_FILE_PROVISIONED = 'BasicReducer/ABACUS_FILE_PROVISIONED'
 const COMPOSER_MODEL_CONNECTED = 'BasicReducer/COMPOSER_MODEL_CONNECTED'
+const SET_SEARCH_COMPONENT_TYPE = 'BasicReducer/SET_SEARCH_COMPONENT_TYPE'
+const SET_COMPONENT_TYPE_LOADING = 'BasicReducer/SET_COMPONENT_TYPE_LOADING'
 
 export const actions = {
   INCREMENT,
@@ -19,7 +21,9 @@ export const actions = {
   COMPOSER_MODEL_CONNECTED,
   FETCH_CREATE_USER_SUCCESS,
   FETCH_REGISTER_PROCESS_SUCCESS,
-  FETCH_COMPONENT_SUCCESS
+  FETCH_COMPONENT_SUCCESS,
+  SEARCH_COMPONENT_SUCCESS,
+  SET_COMPONENT_TYPE_LOADING
 }
 
 export const actionCreators = {
@@ -27,7 +31,9 @@ export const actionCreators = {
   decrement: createAction(DECREMENT),
   accountCreation: createAction(ACCOUNT_CREATION),
   abacusFileProvisioned: createAction(ABACUS_FILE_PROVISIONED),
-  composerModelConnected: createAction(COMPOSER_MODEL_CONNECTED)
+  composerModelConnected: createAction(COMPOSER_MODEL_CONNECTED),
+  setSearchComponentType: createAction(SET_SEARCH_COMPONENT_TYPE),
+  setComponentTypeLoading: createAction(SET_COMPONENT_TYPE_LOADING)
 }
 
 export const initialState = {
@@ -40,7 +46,9 @@ export const initialState = {
   createAccountApi: '', // Currntly not used, will be using if we are getting this api from another api call
   token: '',
   registerProcessApi: '', // Currntly not used, will be using if we are getting this api from another api call
-  componentTypes: ''
+  componentTypes: '',
+  searchComponentType: '',
+  isComponentTypeLoading: false
 }
 
 export default handleActions(
@@ -80,6 +88,18 @@ export default handleActions(
     [FETCH_COMPONENT_SUCCESS]: (state, action) => ({
       ...state,
       componentTypes: action.payload
+    }),
+    [SET_SEARCH_COMPONENT_TYPE]: (state, action) => ({
+      ...state,
+      searchComponentType: action.payload
+    }),
+    [SEARCH_COMPONENT_SUCCESS]: (state, action) => ({
+      ...state,
+      componentTypes: action.payload
+    }),
+    [SET_COMPONENT_TYPE_LOADING]: (state, action) => ({
+      ...state,
+      isComponentTypeLoading: action.payload
     })
   },
   initialState

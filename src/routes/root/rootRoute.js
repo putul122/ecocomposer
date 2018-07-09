@@ -65,6 +65,15 @@ export default class Root extends Component {
 		}
 		resolve(require('../componentsPage/componentsPageRoute').default)
 		break
+	case 'applicationDetail':
+		if (module.hot) {
+			module.hot.accept('../applicationDetailPage/applicationDetailPageRoute', () => {
+                require('../applicationDetailPage/applicationDetailPageRoute').default // eslint-disable-line
+				this.forceUpdate()
+			})
+		}
+		resolve(require('../applicationDetailPage/applicationDetailPageRoute').default)
+		break
 	default:
 		break
 	}
@@ -90,6 +99,7 @@ export default class Root extends Component {
         <Route path='/registering' component={() => this.loadView('registerProcess')} />
         <Route path='/home' component={() => this.loadView('home')} />
         <Route path='/components' component={() => this.loadView('components')} />
+        <Route path='/applicationdetail' component={() => this.loadView('applicationDetail')} />
         <Route path='/' component={() => this.loadView('landing')} />
       </Switch>
     </BrowserRouter>
