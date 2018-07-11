@@ -1,6 +1,6 @@
 import React from 'react'
-import ApplicationDetail from '../../components/applicationDetailed/applicationDetailedComponent'
-// import ApplicationActivity from '../../components/applicationActions/applicationActionsComponent'
+import ApplicationDetail from '../../containers/applicationDetail/applicationDetailContainer'
+import ApplicationActivity from '../../components/applicationActions/applicationActionsComponent'
 import ApplicationActions from '../../components/applicationActivity/applicationActivityComponent'
 import Header from '../../components/header/headerComponent'
 import FooterComponent from '../../components/footer/footerComponent'
@@ -17,11 +17,11 @@ class applicationDetailPageRoute extends React.Component {
         <div className='m-content'>
           <div className='row'>
             <div className='col-md-8'>
-              <ApplicationDetail />
+              <ApplicationDetail {...this.props} />
             </div>
             <div className='col-md-4'>
-              {/* <ApplicationActivity /> */}
               <ApplicationActions />
+              <ApplicationActivity />
             </div>
           </div>
         </div>

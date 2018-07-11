@@ -1,4 +1,5 @@
 import React from 'react'
+// import { Link } from 'react-router-dom'
 // import styles from './leftNavComponent.scss'
 
 class LeftNavigation extends React.Component {

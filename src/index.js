@@ -7,12 +7,16 @@ import registerServiceWorker from './registerServiceWorker'
 import createReduxStore from './redux/store'
 import { AppContainer } from 'react-hot-loader'
 import '../node_modules/bootstrap/dist/css/bootstrap.css'
+// import {createBrowserHistory} from 'history'
+// import { syncHistoryWithStore } from 'react-router-redux'
 // import './assets/vendors/base/vendors.bundle.css'
 // import './assets/demo/demo7/base/style.bundle.css'
 // import './assets/vendors/base/vendors.bundle.js'
 // import './assets/demo/demo7/base/scripts.bundle.js'
 
+// const browserHistory = createBrowserHistory()
 const store = createReduxStore()
+// const history = syncHistoryWithStore(browserHistory, store)
 const render = Component => {
   ReactDOM.render(
     <AppContainer>

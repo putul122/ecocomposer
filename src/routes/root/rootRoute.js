@@ -5,6 +5,7 @@ import AppWrapper from '../../components/appWrapper/appWrapperComponent'
 if (module.hot) {
 	module.hot.accept()
 }
+
 export default class Root extends Component {
 	constructor () {
 		super()
@@ -12,7 +13,14 @@ export default class Root extends Component {
 		this.views = {}
 	}
 
-	loadView (fileName) {
+	ComponentsRoute = () => (
+  <Switch>
+    <Route exact path='/components' component={() => this.loadView('components')} />
+    <Route path='/components/:id' component={() => this.loadView('applicationDetail')} />
+  </Switch>
+	)
+
+	loadView (fileName, props) {
 		if (this.views[fileName]) {
 			return this.views[fileName]
 		}
@@ -80,7 +88,7 @@ export default class Root extends Component {
 })
     )
       .then(View => {
-	this.views[fileName] = <View />
+	this.views[fileName] = <View {...props} />
 })
       .then(() => this.forceUpdate())
       .catch(err => {
@@ -95,12 +103,14 @@ export default class Root extends Component {
   <AppWrapper>
     <BrowserRouter>
       <Switch>
+        <Route exact path='/' component={(props) => this.loadView('landing', props)} />
+        <Route path='/sample_joinjs' component={(props) => this.loadView('dummy', props)} />
         <Route path='/landing' component={() => this.loadView('landing')} />
         <Route path='/registering' component={() => this.loadView('registerProcess')} />
         <Route path='/home' component={() => this.loadView('home')} />
-        <Route path='/components' component={() => this.loadView('components')} />
-        <Route path='/applicationdetail' component={() => this.loadView('applicationDetail')} />
-        <Route path='/' component={() => this.loadView('landing')} />
+        {/* <Route path='/components' component={this.ComponentsRoute} /> */}
+        <Route exact path='/components' component={(props) => this.loadView('components', props)} />
+        <Route path='/:id' component={(props) => this.loadView('applicationDetail', props)} />
       </Switch>
     </BrowserRouter>
   </AppWrapper>

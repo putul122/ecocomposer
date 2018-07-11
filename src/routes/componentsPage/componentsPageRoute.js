@@ -6,7 +6,8 @@ import FooterComponent from '../../components/footer/footerComponent'
 // import { Breadcrumb, BreadcrumbItem } from 'react-bootstrap'
 
 class ComponentsPageRoute extends React.Component {
-	render () {
+  render () {
+      console.log('comp 111', this)
 		return (
   <div>
     <div className='m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-body'>
@@ -15,7 +16,7 @@ class ComponentsPageRoute extends React.Component {
         <div className='m-content'>
           <div className='row'>
             <div className='col-md-8'>
-              <ComponentType />
+              <ComponentType {...this.props} />
             </div>
           </div>
         </div>

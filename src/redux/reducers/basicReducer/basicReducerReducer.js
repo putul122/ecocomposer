@@ -3,6 +3,7 @@ import { FETCH_BASIC_SUCCESS } from '../../sagas/basic/basicSaga'
 import { FETCH_CREATE_USER_SUCCESS } from '../../sagas/register/registerSaga'
 import { FETCH_REGISTER_PROCESS_SUCCESS } from '../../sagas/registerProcess/registerProcessSaga'
 import { FETCH_COMPONENT_SUCCESS, SEARCH_COMPONENT_SUCCESS } from '../../sagas/componentType/componentTypeSaga'
+import { FETCH_COMPONENT_BY_ID_SUCCESS, FETCH_COMPONENT_CONSTRAINT_SUCCESS, FETCH_COMPONENT_COMPONENT_SUCCESS, SEARCH_COMPONENT_COMPONENT_SUCCESS } from '../../sagas/applicationDetail/applicationDetailSaga'
 // Name Spaced Action Types
 const INCREMENT = 'BasicReducer/INCREMENT'
 const DECREMENT = 'BasicReducer/DECREMENT'
@@ -23,7 +24,11 @@ export const actions = {
   FETCH_REGISTER_PROCESS_SUCCESS,
   FETCH_COMPONENT_SUCCESS,
   SEARCH_COMPONENT_SUCCESS,
-  SET_COMPONENT_TYPE_LOADING
+  SET_COMPONENT_TYPE_LOADING,
+  FETCH_COMPONENT_BY_ID_SUCCESS,
+  FETCH_COMPONENT_CONSTRAINT_SUCCESS,
+  FETCH_COMPONENT_COMPONENT_SUCCESS,
+  SEARCH_COMPONENT_COMPONENT_SUCCESS
 }
 
 export const actionCreators = {
@@ -48,7 +53,10 @@ export const initialState = {
   registerProcessApi: '', // Currntly not used, will be using if we are getting this api from another api call
   componentTypes: '',
   searchComponentType: '',
-  isComponentTypeLoading: false
+  isComponentTypeLoading: false,
+  componentDetail: '',
+  componentConstraints: '',
+  componentComponents: ''
 }
 
 export default handleActions(
@@ -100,6 +108,22 @@ export default handleActions(
     [SET_COMPONENT_TYPE_LOADING]: (state, action) => ({
       ...state,
       isComponentTypeLoading: action.payload
+    }),
+    [FETCH_COMPONENT_BY_ID_SUCCESS]: (state, action) => ({
+      ...state,
+      componentDetail: action.payload
+    }),
+    [FETCH_COMPONENT_CONSTRAINT_SUCCESS]: (state, action) => ({
+      ...state,
+      componentConstraints: action.payload
+    }),
+    [FETCH_COMPONENT_COMPONENT_SUCCESS]: (state, action) => ({
+      ...state,
+      componentComponents: action.payload
+    }),
+    [SEARCH_COMPONENT_COMPONENT_SUCCESS]: (state, action) => ({
+      ...state,
+      componentComponents: action.payload
     })
   },
   initialState
