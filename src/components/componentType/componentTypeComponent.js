@@ -23,13 +23,11 @@ export default function ComponentType (props) {
     let handleInputChange = function (event) {
       // props.setSearchComponentType(searchTextBox.value)
       let payload = {
-        'search': searchTextBox.value
+        'search': searchTextBox.value ? searchTextBox.value : ''
       }
-      if (searchTextBox.value && searchTextBox.value.length > 1) {
-        // if (searchTextBox.value.length % 2 === 0) {
-          props.searchComponent(payload)
-          props.setComponentTypeLoading(true)
-        // }
+      if (searchTextBox.value.length >= 0) {
+        props.searchComponent(payload)
+        props.setComponentTypeLoading(true)
       }
     }
 

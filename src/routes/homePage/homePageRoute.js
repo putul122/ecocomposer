@@ -2,7 +2,7 @@ import React from 'react'
 import ActivityFeed from '../../components/activityFeed/activityfeedComponent'
 import RecentPlaces from '../../components/recentPlaces/recentPlacesComponent'
 import LeftNavigation from '../../components/leftNavigation/leftNavComponent'
-import Header from '../../components/header/headerComponent'
+import Header from '../../containers/header/headerContainer'
 import FooterComponent from '../../components/footer/footerComponent'
 // import Breadcrumb from '../../components/breadcrumb/breadcrumbComponent'
 
@@ -10,7 +10,7 @@ class ActivityPageRoute extends React.Component {
 	render () {
 		return (
   <div>
-    <Header />
+    <Header {...this.props} />
     <div className='m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-body'>
       <LeftNavigation />
       <div className='m-grid__item m-grid__item--fluid m-wrapper'>

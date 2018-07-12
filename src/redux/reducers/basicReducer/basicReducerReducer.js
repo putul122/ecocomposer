@@ -1,9 +1,10 @@
 import { createAction, handleActions } from 'redux-actions'
 import { FETCH_BASIC_SUCCESS } from '../../sagas/basic/basicSaga'
-import { FETCH_CREATE_USER_SUCCESS } from '../../sagas/register/registerSaga'
+import { CREATE_USER_SUCCESS } from '../../sagas/register/registerSaga'
 import { FETCH_REGISTER_PROCESS_SUCCESS } from '../../sagas/registerProcess/registerProcessSaga'
 import { FETCH_COMPONENT_SUCCESS, SEARCH_COMPONENT_SUCCESS } from '../../sagas/componentType/componentTypeSaga'
 import { FETCH_COMPONENT_BY_ID_SUCCESS, FETCH_COMPONENT_CONSTRAINT_SUCCESS, FETCH_COMPONENT_COMPONENT_SUCCESS, SEARCH_COMPONENT_COMPONENT_SUCCESS } from '../../sagas/applicationDetail/applicationDetailSaga'
+import { ACTIVITY_MESSAGE_SUCCESS } from '../../sagas/applicationActivity/applicationActivitySaga'
 // Name Spaced Action Types
 const INCREMENT = 'BasicReducer/INCREMENT'
 const DECREMENT = 'BasicReducer/DECREMENT'
@@ -12,6 +13,8 @@ const ABACUS_FILE_PROVISIONED = 'BasicReducer/ABACUS_FILE_PROVISIONED'
 const COMPOSER_MODEL_CONNECTED = 'BasicReducer/COMPOSER_MODEL_CONNECTED'
 const SET_SEARCH_COMPONENT_TYPE = 'BasicReducer/SET_SEARCH_COMPONENT_TYPE'
 const SET_COMPONENT_TYPE_LOADING = 'BasicReducer/SET_COMPONENT_TYPE_LOADING'
+const SET_MODAL_OPEN_STATUS = 'BasicReducer/SET_MODAL_OPEN_STATUS'
+const SELECTED_COMPONENT_TYPE = 'BasicReducer/SELECTED_COMPONENT_TYPE'
 
 export const actions = {
   INCREMENT,
@@ -20,7 +23,7 @@ export const actions = {
   ACCOUNT_CREATION,
   ABACUS_FILE_PROVISIONED,
   COMPOSER_MODEL_CONNECTED,
-  FETCH_CREATE_USER_SUCCESS,
+  CREATE_USER_SUCCESS,
   FETCH_REGISTER_PROCESS_SUCCESS,
   FETCH_COMPONENT_SUCCESS,
   SEARCH_COMPONENT_SUCCESS,
@@ -28,7 +31,10 @@ export const actions = {
   FETCH_COMPONENT_BY_ID_SUCCESS,
   FETCH_COMPONENT_CONSTRAINT_SUCCESS,
   FETCH_COMPONENT_COMPONENT_SUCCESS,
-  SEARCH_COMPONENT_COMPONENT_SUCCESS
+  SEARCH_COMPONENT_COMPONENT_SUCCESS,
+  SET_MODAL_OPEN_STATUS,
+  ACTIVITY_MESSAGE_SUCCESS,
+  SELECTED_COMPONENT_TYPE
 }
 
 export const actionCreators = {
@@ -38,7 +44,9 @@ export const actionCreators = {
   abacusFileProvisioned: createAction(ABACUS_FILE_PROVISIONED),
   composerModelConnected: createAction(COMPOSER_MODEL_CONNECTED),
   setSearchComponentType: createAction(SET_SEARCH_COMPONENT_TYPE),
-  setComponentTypeLoading: createAction(SET_COMPONENT_TYPE_LOADING)
+  setComponentTypeLoading: createAction(SET_COMPONENT_TYPE_LOADING),
+  setModalOpenStatus: createAction(SET_MODAL_OPEN_STATUS),
+  selectedComponentType: createAction(SELECTED_COMPONENT_TYPE)
 }
 
 export const initialState = {
@@ -52,11 +60,15 @@ export const initialState = {
   token: '',
   registerProcessApi: '', // Currntly not used, will be using if we are getting this api from another api call
   componentTypes: '',
-  searchComponentType: '',
+  searchComponentType: '',  // Currentle not used
   isComponentTypeLoading: false,
   componentDetail: '',
   componentConstraints: '',
-  componentComponents: ''
+  componentComponents: '',
+  isLoggedin: localStorage.getItem('isLoggedin') ? localStorage.getItem('isLoggedin') : false,
+  modalIsOpen: false,
+  activityMessages: '',
+  selectedComponentType: ''
 }
 
 export default handleActions(
@@ -85,9 +97,10 @@ export default handleActions(
       ...state,
       isComposerModelConnected: action.payload
     }),
-    [FETCH_CREATE_USER_SUCCESS]: (state, action) => ({
+    [CREATE_USER_SUCCESS]: (state, action) => ({
       ...state,
-      createAccountApi: action.payload
+      token: action.payload,
+      isLoggedin: true
     }),
     [FETCH_REGISTER_PROCESS_SUCCESS]: (state, action) => ({
       ...state,
@@ -124,6 +137,18 @@ export default handleActions(
     [SEARCH_COMPONENT_COMPONENT_SUCCESS]: (state, action) => ({
       ...state,
       componentComponents: action.payload
+    }),
+    [SET_MODAL_OPEN_STATUS]: (state, action) => ({
+      ...state,
+      modalIsOpen: action.payload
+    }),
+    [ACTIVITY_MESSAGE_SUCCESS]: (state, action) => ({
+      ...state,
+      activityMessages: action.payload
+    }),
+    [SELECTED_COMPONENT_TYPE]: (state, action) => ({
+      ...state,
+      selectedComponentType: action.payload
     })
   },
   initialState

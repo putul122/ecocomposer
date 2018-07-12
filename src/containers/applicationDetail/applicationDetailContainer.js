@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import { compose, lifecycle } from 'recompose'
 import ApplicationDetail from '../../components/applicationDetail/applicationDetailComponent'
 import { actions as sagaActions } from '../../redux/sagas/'
-// import { actionCreators } from '../../redux/reducers/basicReducer/basicReducerReducer'
+import { actionCreators } from '../../redux/reducers/basicReducer/basicReducerReducer'
 
 // Global State
 export function mapStateToProps (state, props) {
@@ -17,7 +17,8 @@ export const propsMapping: Callbacks = {
   fetchComponentById: sagaActions.applicationDetailActions.fetchComponentById,
   fetchComponentConstraint: sagaActions.applicationDetailActions.fetchComponentConstraint,
   fetchComponentComponent: sagaActions.applicationDetailActions.fetchComponentComponent,
-  searchComponentComponent: sagaActions.applicationDetailActions.searchComponentComponent
+  searchComponentComponent: sagaActions.applicationDetailActions.searchComponentComponent,
+  selectedComponentType: actionCreators.selectedComponentType
 }
 
 // If you want to use the function mapping
@@ -32,6 +33,7 @@ export default compose(
   lifecycle({
     componentWillMount: function () {
       const componentTypeId = this.props.match.params.id
+      this.props.selectedComponentType(componentTypeId)
       let payload = {
         'id': componentTypeId,
         'recommendedComponent': {

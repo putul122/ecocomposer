@@ -1,32 +1,31 @@
 import axios from 'axios'
-import { takeEvery, call } from 'redux-saga/effects'
+import { takeLatest, call, put } from 'redux-saga/effects'
 import { createAction } from 'redux-actions'
 
 // Saga action strings
-export const FETCH_CREATE_USER = 'saga/Register/FETCH_CREATE_USER'
-export const FETCH_CREATE_USER_SUCCESS = 'saga/Register/FETCH_CREATE_USER_SUCCESS'
-export const FETCH_CREATE_USER_FAILURE = 'saga/Register/FETCH_CREATE_USER_FAILURE'
+export const CREATE_USER = 'saga/Register/CREATE_USER'
+export const CREATE_USER_SUCCESS = 'saga/Register/CREATE_USER_SUCCESS'
+export const CREATE_USER_FAILURE = 'saga/Register/CREATE_USER_FAILURE'
 
 export const actionCreators = {
-  fetchCreateUser: createAction(FETCH_CREATE_USER),
-  fetchCreateUserSuccess: createAction(FETCH_CREATE_USER_SUCCESS),
-  fetchCreateUserFailure: createAction(FETCH_CREATE_USER_FAILURE)
+  createUser: createAction(CREATE_USER),
+  createUserSuccess: createAction(CREATE_USER_SUCCESS),
+  createUserFailure: createAction(CREATE_USER_FAILURE)
 }
 
 export default function * watchCreateUser () {
-  yield takeEvery(FETCH_CREATE_USER, getCreateUserApi)
+  yield takeLatest(CREATE_USER, createUser)
 }
 
-export function * getCreateUserApi (action) {
+export function * createUser (action) {
   try {
-    const createUserApi = yield call(
-      axios.get,
-      'https://virtserver.swaggerhub.com/JakoMenkveld/ecocomposer-discovery/1/action'
+    const createUser = yield call(
+      axios.post,
+      'https://ecocomposermockapis.azurewebsites.net/ecocomposer-account/users',
+      action.payload
     )
-    console.log('create user api', createUserApi)
-    // yield put(actionCreators.fetchCreateUserSuccess(createUserApi._links.0.href))
+    yield put(actionCreators.createUserSuccess(createUser.data.data))
   } catch (error) {
-    console.log('error', error)
-    // `yield put(actionCreators.fetchCreateUserFailure(error))
+    yield put(actionCreators.createUserFailure(error))
   }
 }

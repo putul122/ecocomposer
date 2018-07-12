@@ -48,8 +48,6 @@ export function * getComponentById (action) {
       axios.get,
       'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types/' + action.payload.id
     )
-    console.log('Component Types', componentDetails)
-    console.log('Component action', action)
     yield put(actionCreators.fetchComponentByIdSuccess(componentDetails.data.data))
   } catch (error) {
     yield put(actionCreators.fetchComponentByIdFailure(error))
@@ -62,8 +60,6 @@ export function * getComponentConstraint (action) {
         axios.get,
         'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types/' + action.payload.id + '/constraints'
       )
-      console.log('Component Constraints', componentConstraints)
-      console.log('Component action', action)
       yield put(actionCreators.fetchComponentConstraintSuccess(componentConstraints.data.data))
     } catch (error) {
       yield put(actionCreators.fetchComponentConstraintFailure(error))
@@ -77,8 +73,6 @@ export function * getComponentComponent (action) {
         'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types/' + action.payload.id + '/components',
         action.payload.recommendedComponent
       )
-      console.log('Component Components', componentComponents)
-      console.log('Component action', action)
       yield put(actionCreators.fetchComponentComponentSuccess(componentComponents.data.data))
     } catch (error) {
       yield put(actionCreators.fetchComponentComponentFailure(error))

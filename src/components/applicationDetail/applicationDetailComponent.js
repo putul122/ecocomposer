@@ -43,13 +43,13 @@ export default function ApplicationDetail (props) {
     let payload = {
       'id': props.componentDetail.resource.id,
       'searchComponent': {
-        'search': searchTextBox.value,
+        'search': searchTextBox.value ? searchTextBox.value : '',
         'page_size': 5,
         'page': 1,
         'recommended': false
       }
     }
-    if (searchTextBox.value && searchTextBox.value.length > 0) {
+    if (searchTextBox.value.length > 0) {
       // if (searchTextBox.value.length % 2 === 0) {
         props.searchComponentComponent(payload)
         // props.setComponentTypeLoading(true)

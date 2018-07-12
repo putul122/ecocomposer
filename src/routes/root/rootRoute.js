@@ -105,9 +105,9 @@ export default class Root extends Component {
       <Switch>
         <Route exact path='/' component={(props) => this.loadView('landing', props)} />
         <Route path='/sample_joinjs' component={(props) => this.loadView('dummy', props)} />
-        <Route path='/landing' component={() => this.loadView('landing')} />
-        <Route path='/registering' component={() => this.loadView('registerProcess')} />
-        <Route path='/home' component={() => this.loadView('home')} />
+        <Route path='/landing' component={(props) => this.loadView('landing', props)} />
+        <Route path='/registering' component={(props) => this.loadView('registerProcess', props)} />
+        <Route path='/home' component={(props) => this.loadView('home', props)} />
         {/* <Route path='/components' component={this.ComponentsRoute} /> */}
         <Route exact path='/components' component={(props) => this.loadView('components', props)} />
         <Route path='/:id' component={(props) => this.loadView('applicationDetail', props)} />
