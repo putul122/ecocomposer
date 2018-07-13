@@ -33,7 +33,7 @@ export function * getComponents (action) {
   try {
     const componentTypes = yield call(
       axios.get,
-      'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types?search=&page=' + action.payload.page + '&page_size=' + action.payload.page_size + '&recommended=true'
+      'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types?search=' + action.payload.search + '&page=' + action.payload.page + '&page_size=' + action.payload.page_size + '&recommended=true'
     )
     yield put(actionCreators.fetchComponentSuccess(componentTypes.data))
   } catch (error) {
