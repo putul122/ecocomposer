@@ -11,7 +11,7 @@ const customStyles = {
     left: '70%',
     right: 'auto',
     bottom: 'auto',
-    transform: 'translate(-50%, -50%)'
+    transform: 'translate(0%, -80%)'
   }
 }
 
