@@ -5,6 +5,7 @@ import $ from 'jquery/dist/jquery'
 // import _ from 'lodash'
 import styles from './jointComponent.scss'
 
+// Sample data for visualization
   var apidata = {
     'data': [
         {
@@ -515,449 +516,300 @@ import styles from './jointComponent.scss'
     console.log('data', data)
   })
 
-// var graphNodes = [
-//   {
-//   'Id': 1,
-//   'Name': 'Another Application',
-//   'Title': 'Another Application',
-//   'Attributes': ['topleft']
-//   },
-//   {
-//   'Id': 2,
-//   'Name': 'Other component types',
-//   'Title': 'Other component types',
-//   'Attributes': ['topright']
-//   },
-//   {
-//   'Id': 3,
-//   'Name': 'Application',
-//   'Title': 'Application',
-//   'Attributes': ['center']
-//   },
-//   {
-//   'Id': 4,
-//   'Name': 'Another Application',
-//   'Title': 'Another Application',
-//   'Attributes': ['']
-//   },
-//   {
-//   'Id': 5,
-//   'Name': 'Capability',
-//   'Title': 'Capability',
-//   'Attributes': ['']
-//   },
-//   {
-//   'Id': 6,
-//   'Name': 'Process',
-//   'Title': 'Process',
-//   'Attributes': ['']
-//   },
-//   {
-//   'Id': 7,
-//   'Name': 'Server',
-//   'Title': 'Server',
-//   'Attributes': ['']
-//   },
-//   {
-//   'Id': 8,
-//   'Name': 'Any Component Type',
-//   'Title': 'Any Component Type',
-//   'Attributes': ['']
-//   }
-// ]
+    var Shape = joint.dia.Element.define('graph.Shape', {
+    size: {
+        width: 100,
+        height: 40
+    },
+    attrs: {
+        rect: {
+            refWidth: '100%',
+            refHeight: '100%',
+            fill: 'white',
+            stroke: 'rgb(0, 0, 0)',
+            strokeWidth: 1,
+            strokeOpacity: 0.75,
+            rx: 5,
+            ry: 5
+        },
+        text: {
+            refX: '50%',
+            refY: '50%',
+            yAlignment: 'middle',
+            xAlignment: 'middle',
+            'text-anchor': 'middle',
+            fontSize: 8
+        }
+    }
+    }, {
+    markup: '<rect/><title/><text/>',
+    setTitle: function (title) {
+        return this.attr('title/text', title || '')
+    },
+    setText: function (text) {
+        return this.attr('text/text', text || '')
+    },
+    setCSSClasses: function (cssClasses) {
+        if (cssClasses) {
+            var shape = this
+            $.each(cssClasses, function (index, cssClass) {
+                shape.attr('rect/class', (shape.attr('rect/class') || '') + ' ' + cssClass)
+                shape.attr('text/class', (shape.attr('text/class') || '') + ' ' + cssClass)
+                // shape.attr('image/class', (shape.attr('image/class') || '') + ' ' + cssClass);
+            })
+        }
+    }
+    })
 
-// var graphConnections = [
-//   {
-//   'Id': 1,
-//   'Title': 'can be a child of',
-//   'StartComponentId': 3,
-//   'EndComponentId': 1
-//   },
-//   {
-//   'Id': 2,
-//   'Title': 'Can be a child of',
-//   'StartComponentId': 3,
-//   'EndComponentId': 2
-//   },
-//   {
-//   'Id': 3,
-//   'Title': 'Uses',
-//   'StartComponentId': 5,
-//   'EndComponentId': 3
-//   },
-//   {
-//   'Id': 4,
-//   'Title': 'Uses',
-//   'StartComponentId': 6,
-//   'EndComponentId': 3
-//   },
-//   {
-//   'Id': 5,
-//   'Title': 'Target',
-//   'StartComponentId': 3,
-//   'EndComponentId': 4
-//   },
-//   {
-//   'Id': 6,
-//   'Title': 'is Hosted At',
-//   'StartComponentId': 3,
-//   'EndComponentId': 7
-//   },
-//   {
-//   'Id': 7,
-//   'Title': 'is Hosted At',
-//   'StartComponentId': 3,
-//   'EndComponentId': 8
-//   },
-//   {
-//   'Id': 8,
-//   'Title': 'Acesses',
-//   'StartComponentId': 8,
-//   'EndComponentId': 3
-//   },
-//   {
-//   'Id': 9,
-//   'Title': 'Consumes',
-//   'StartComponentId': 8,
-//   'EndComponentId': 3
-//   },
-//   {
-//   'Id': 10,
-//   'Title': 'Impacted By',
-//   'StartComponentId': 8,
-//   'EndComponentId': 3
-//   },
-//   {
-//   'Id': 11,
-//   'Title': 'Implemented By',
-//   'StartComponentId': 8,
-//   'EndComponentId': 3
-//   },
-//   {
-//   'Id': 12,
-//   'Title': 'Interfaces',
-//   'StartComponentId': 8,
-//   'EndComponentId': 3
-//   },
-//   {
-//   'Id': 13,
-//   'Title': 'Owns',
-//   'StartComponentId': 8,
-//   'EndComponentId': 3
-//   },
-//   {
-//   'Id': 14,
-//   'Title': 'Produces',
-//   'StartComponentId': 8,
-//   'EndComponentId': 3
-//   },
-//   {
-//   'Id': 15,
-//   'Title': 'Requires',
-//   'StartComponentId': 8,
-//   'EndComponentId': 3
-//   }
-// ]
+    var Link = joint.dia.Link.define('graph.Link', {
+    attrs: {
+        '.connection': {
+            stroke: 'black',
+            strokeWidth: 2,
+            cursor: 'pointer',
+            // pointerEvents: 'none',
+            targetMarker: {
+                type: 'path',
+                fill: 'black',
+                stroke: 'none',
+                d: 'M 8 -8 0 0 8 8 z'
+            }
+        },
+        defaultLabel: {
+            attrs: { text: { text: '*' } }
+        }
+    },
+    wrapper: {
+        connection: true,
+        strokeWidth: 10,
+        strokeLinejoin: 'round'
+    },
+    z: -1,
+    weight: 1,
+    minLen: 1,
+    labels: [{
+        markup: '<text/>',
+        position: {
+            distance: 0.5,
+            offset: {
+                x: 10,
+                y: -5
+            }
+        },
+        attrs: {
+            text: {
+                fill: 'gray',
+                textAnchor: 'middle',
+                refY: 5,
+                refY2: '-60%',
+                fontSize: 8,
+                cursor: 'pointer',
+                fontFamily: 'sans-serif'
+            }
+        },
+        size: {
+            width: 120, height: 20
+        }
+    }]
 
-var Shape = joint.dia.Element.define('graph.Shape', {
-  size: {
-      width: 120,
-      height: 60
-  },
-  attrs: {
-      rect: {
-          refWidth: '100%',
-          refHeight: '100%',
-          fill: 'white',
-          stroke: 'rgb(0, 0, 0)',
-          strokeWidth: 1,
-          strokeOpacity: 0.75,
-          rx: 5,
-          ry: 5
-      },
-      text: {
-          refX: '50%',
-          refY: '50%',
-          yAlignment: 'middle',
-          xAlignment: 'middle',
-          'text-anchor': 'middle',
-          fontSize: 12
-      }
-  }
-}, {
-  markup: '<rect/><title/><text/>',
-  setTitle: function (title) {
-     return this.attr('title/text', title || '')
- },
-  setText: function (text) {
-      return this.attr('text/text', text || '')
-  },
-  setCSSClasses: function (cssClasses) {
-      if (cssClasses) {
-          var shape = this
-          $.each(cssClasses, function (index, cssClass) {
-              shape.attr('rect/class', (shape.attr('rect/class') || '') + ' ' + cssClass)
-              shape.attr('text/class', (shape.attr('text/class') || '') + ' ' + cssClass)
-              // shape.attr('image/class', (shape.attr('image/class') || '') + ' ' + cssClass);
-          })
-      }
-  }
-})
+    }, {
+    markup: '<path class="connection"/><g class="labels"/>',
 
-var Link = joint.dia.Link.define('graph.Link', {
-  attrs: {
-      '.connection': {
-          stroke: 'black',
-          strokeWidth: 2,
-          cursor: 'pointer',
-          // pointerEvents: 'none',
-          targetMarker: {
-              type: 'path',
-              fill: 'black',
-              stroke: 'none',
-              d: 'M 8 -8 0 0 8 8 z'
-          }
-      },
-      defaultLabel: {
-          attrs: { text: { text: '*' } }
-      }
-  },
-  wrapper: {
-      connection: true,
-      strokeWidth: 10,
-      strokeLinejoin: 'round'
-  },
-  z: -1,
-  weight: 1,
-  minLen: 1,
-  labels: [{
-      markup: '<text/>',
-      position: {
-          distance: 0.5,
-          offset: {
-              x: 10,
-              y: -5
-          }
-      },
-      attrs: {
-          text: {
-              fill: 'gray',
-              textAnchor: 'middle',
-              refY: 5,
-              refY2: '-60%',
-              fontSize: 12,
-              cursor: 'pointer',
-              fontFamily: 'sans-serif'
-          }
-      },
-      size: {
-          width: 120, height: 20
-      }
-  }]
+    connect: function (sourceId, targetId) {
+        return this.set({
+            source: { id: sourceId },
+            target: { id: targetId }
+        })
+    },
 
-}, {
-  markup: '<path class="connection"/><g class="labels"/>',
+    setTitle: function (title) {
+        return this.attr('text/text', title || '')
+    },
 
-  connect: function (sourceId, targetId) {
-      return this.set({
-          source: { id: sourceId },
-          target: { id: targetId }
-      })
-  },
+    setLabelText: function (text) {
+        return this.prop('labels/0/attrs/text/text', text || '')
+    },
+    setLinkId: function (id) {
+        return this.attr('linkid/id', id || '')
+    }
+    })
 
-  setTitle: function (title) {
-      return this.attr('text/text', title || '')
-  },
+    var LayoutControls = joint.mvc.View.extend({
 
-  setLabelText: function (text) {
-      return this.prop('labels/0/attrs/text/text', text || '')
-  },
-  setLinkId: function (id) {
-      return this.attr('linkid/id', id || '')
-  }
-})
+    events: {
+        change: 'layout',
+        input: 'layout'
+    },
 
-var LayoutControls = joint.mvc.View.extend({
+    options: {
+        padding: 50
+    },
 
-  events: {
-      change: 'layout',
-      input: 'layout'
-  },
+    init: function () {
+        var options = this.options
 
-  options: {
-      padding: 50
-  },
+        options.cells = this.buildGraph(options.nodes, options.connections)
 
-  init: function () {
-      var options = this.options
+        // if (options.adjacencyList) {
+        //     options.cells = this.buildGraphFromAdjacencyList(options.adjacencyList);
+        // }
 
-      options.cells = this.buildGraph(options.nodes, options.connections)
+        this.listenTo(options.paper.model, 'change', function (cell, opt) {
+            if (opt.layout) {
+                this.layout()
+            }
+        })
+    },
 
-      // if (options.adjacencyList) {
-      //     options.cells = this.buildGraphFromAdjacencyList(options.adjacencyList);
-      // }
+    layout: function () {
+        var paper = this.options.paper
+        var graph = paper.model
+        var cells = this.options.cells
 
-      this.listenTo(options.paper.model, 'change', function (cell, opt) {
-          if (opt.layout) {
-              this.layout()
-          }
-      })
-  },
+        // joint.layout.DirectedGraph.layout(cells, this.getLayoutOptions());
 
-  layout: function () {
-      var paper = this.options.paper
-      var graph = paper.model
-      var cells = this.options.cells
+        var gBox = joint.layout.DirectedGraph.layout(cells, this.getLayoutOptions())
+        console.log('gBox', gBox)
 
-      // joint.layout.DirectedGraph.layout(cells, this.getLayoutOptions());
+        if (graph.getCells().length === 0) {
+            // The graph could be empty at the beginning to avoid cells rendering
+            // and their subsequent update when elements are translated
+            graph.resetCells(cells)
+        }
 
-      var gBox = joint.layout.DirectedGraph.layout(cells, this.getLayoutOptions())
-      console.log('gBox', gBox)
+        paper.fitToContent({
+            padding: this.options.padding,
+            gridWidth: 10,
+            gridHeight: 10,
+            allowNewOrigin: 'any'
+        })
 
-      if (graph.getCells().length === 0) {
-          // The graph could be empty at the beginning to avoid cells rendering
-          // and their subsequent update when elements are translated
-          graph.resetCells(cells)
-      }
+        this.trigger('layout')
+    },
 
-      paper.fitToContent({
-          padding: this.options.padding,
-          gridWidth: 10,
-          gridHeight: 10,
-          allowNewOrigin: 'any'
-      })
+    getLayoutOptions: function () {
+        return {
+            setVertices: false,
+            setLabels: true,
+            ranker: 'network-simplex',
+            rankDir: 'LR',
+            align: 'DR',
+            rankSep: 50,
+            edgeSep: 50,
+            nodeSep: 50
+        }
+    },
 
-      this.trigger('layout')
-  },
+    buildGraph: function (nodes, connections) {
+        var elements = []
+        var links = []
 
-  getLayoutOptions: function () {
-      return {
-          setVertices: false,
-          setLabels: true,
-          ranker: 'network-simplex',
-          rankDir: 'LR',
-          align: 'DR',
-          rankSep: 50,
-          edgeSep: 50,
-          nodeSep: 50
-      }
-  },
+        if (nodes) {
+            $.each(nodes, function (index, node) {
+                var shape = new Shape({ id: node.Id })
+                if (node.Id === 1) {
+                    shape.position(0, 0)
+                    // shape.resize(100, 30);
+                }
 
-  buildGraph: function (nodes, connections) {
-     var elements = []
-     var links = []
+                if (node.Id === 3) {
+                    shape.prop('fillColor', ['blue'])
+                }
 
-     if (nodes) {
-         $.each(nodes, function (index, node) {
-             var shape = new Shape({ id: node.Id })
-              if (node.Id === 1) {
-                shape.position(0, 0)
-                // shape.resize(100, 30);
-              }
+                shape.setText(node.Name)
 
-              if (node.Id === 3) {
-                shape.prop('fillColor', ['blue'])
-              }
+                if (node.Title) { shape.setTitle(node.Title) }
+                // if (node.Attributes) { shape.setCSSClasses(node.Attributes); }
+                shape.setCSSClasses(node.Attributes)
+                elements.push(shape)
+            })
+        }
 
-             shape.setText(node.Name)
+        if (connections) {
+            $.each(connections, function (index, connection) {
+                var link = new Link().connect(connection.StartComponentId, connection.EndComponentId)
 
-             if (node.Title) { shape.setTitle(node.Title) }
-             // if (node.Attributes) { shape.setCSSClasses(node.Attributes); }
-            shape.setCSSClasses(node.Attributes)
-             elements.push(shape)
-         })
-     }
+                if (connection.Title) { link.setTitle(connection.Title) }
 
-     if (connections) {
-         $.each(connections, function (index, connection) {
-             var link = new Link().connect(connection.StartComponentId, connection.EndComponentId)
+                link.setLinkId(connection.Id)
+                links.push(link)
+            })
+        }
+        console.log('buildGraph', links)
+        // Links must be added after all the elements. This is because when the links
+        // are added to the graph, link source/target
+        // elements must be in the graph already.
+        return elements.concat(links)
+    }
 
-             if (connection.Title) { link.setTitle(connection.Title) }
+    })
 
-             link.setLinkId(connection.Id)
-             links.push(link)
-         })
-     }
-     console.log('buildGraph', links)
-     // Links must be added after all the elements. This is because when the links
-     // are added to the graph, link source/target
-     // elements must be in the graph already.
-     return elements.concat(links)
- }
+    var LinkControls = joint.mvc.View.extend({
 
-})
+    highlighter: {
+        name: 'stroke',
+        options: {
+            attrs: {
+                'stroke': 'lightcoral',
+                'stroke-width': 4
+            }
+        }
+    },
 
-var LinkControls = joint.mvc.View.extend({
+    events: {
+        change: 'updateLink',
+        input: 'updateLink'
+    },
 
-  highlighter: {
-      name: 'stroke',
-      options: {
-          attrs: {
-              'stroke': 'lightcoral',
-              'stroke-width': 4
-          }
-      }
-  },
+    init: function () {
+        this.highlight()
+        this.updateControls()
+    },
 
-  events: {
-      change: 'updateLink',
-      input: 'updateLink'
-  },
+    onRemove: function () {
+        this.unhighlight()
+    },
 
-  init: function () {
-      this.highlight()
-      this.updateControls()
-  },
+    highlight: function () {
+        // console.log('highlited');
+        // cellView.highlight();
+        this.options.cellView.highlight('rect', { highlighter: this.highlighter })
+    },
 
-  onRemove: function () {
-      this.unhighlight()
-  },
+    unhighlight: function () {
+        this.options.cellView.unhighlight('rect', { highlighter: this.highlighter })
+    }
 
-  highlight: function () {
-    // console.log('highlited');
-    // cellView.highlight();
-      this.options.cellView.highlight('rect', { highlighter: this.highlighter })
-  },
+    }, {
 
-  unhighlight: function () {
-      this.options.cellView.unhighlight('rect', { highlighter: this.highlighter })
-  }
+    remove: function () {
+        if (this.instance) {
+            this.instance.remove()
+            this.instance = null
+        }
+    },
 
-}, {
+    refresh: function () {
+        if (this.instance) {
+            this.instance.unhighlight()
+            this.instance.highlight()
+        }
+    },
 
-  remove: function () {
-      if (this.instance) {
-          this.instance.remove()
-          this.instance = null
-      }
-  },
+    instance: null,
 
-  refresh: function () {
-      if (this.instance) {
-          this.instance.unhighlight()
-          this.instance.highlight()
-      }
-  },
+    template: ''// document.getElementById('link-controls-template').content
 
-  instance: null,
-
-  template: ''// document.getElementById('link-controls-template').content
-
-})
+    })
 
 class JointComponent extends React.Component {
     componentDidMount () {
       this.controls = new LayoutControls({
-        // el: document.getElementById('layout-controls'),
         paper: new joint.dia.Paper({
             el: ReactDOM.findDOMNode(this.refs.placeholder),
             gridSize: 1,
             height: 362,
-            width: 400,
-            interactive: function (cellView) {
-              // linkMove: false
-                // return cellView.model.isElement();
-            }
+            width: 400
         }),
         nodes: nodeArray,
         connections: linkArray

@@ -15,6 +15,7 @@ const SET_SEARCH_COMPONENT_TYPE = 'BasicReducer/SET_SEARCH_COMPONENT_TYPE'
 const SET_COMPONENT_TYPE_LOADING = 'BasicReducer/SET_COMPONENT_TYPE_LOADING'
 const SET_MODAL_OPEN_STATUS = 'BasicReducer/SET_MODAL_OPEN_STATUS'
 const SELECTED_COMPONENT_TYPE = 'BasicReducer/SELECTED_COMPONENT_TYPE'
+const SET_CURRENT_PAGE = 'BasicReducer/SET_CURRENT_PAGE'
 
 export const actions = {
   INCREMENT,
@@ -34,7 +35,8 @@ export const actions = {
   SEARCH_COMPONENT_COMPONENT_SUCCESS,
   SET_MODAL_OPEN_STATUS,
   ACTIVITY_MESSAGE_SUCCESS,
-  SELECTED_COMPONENT_TYPE
+  SELECTED_COMPONENT_TYPE,
+  SET_CURRENT_PAGE
 }
 
 export const actionCreators = {
@@ -46,7 +48,8 @@ export const actionCreators = {
   setSearchComponentType: createAction(SET_SEARCH_COMPONENT_TYPE),
   setComponentTypeLoading: createAction(SET_COMPONENT_TYPE_LOADING),
   setModalOpenStatus: createAction(SET_MODAL_OPEN_STATUS),
-  selectedComponentType: createAction(SELECTED_COMPONENT_TYPE)
+  selectedComponentType: createAction(SELECTED_COMPONENT_TYPE),
+  setCurrentPage: createAction(SET_CURRENT_PAGE)
 }
 
 export const initialState = {
@@ -56,11 +59,8 @@ export const initialState = {
   isAbacusFileProvisioned: false,
   isComposerModelConnected: false,
   registerProcessStatus: '',
-  createAccountApi: '', // Currntly not used, will be using if we are getting this api from another api call
   token: '',
-  registerProcessApi: '', // Currntly not used, will be using if we are getting this api from another api call
   componentTypes: '',
-  searchComponentType: '',  // Currentle not used
   isComponentTypeLoading: false,
   componentDetail: '',
   componentConstraints: '',
@@ -68,7 +68,8 @@ export const initialState = {
   isLoggedin: localStorage.getItem('isLoggedin') ? localStorage.getItem('isLoggedin') : false,
   modalIsOpen: false,
   activityMessages: '',
-  selectedComponentType: ''
+  selectedComponentType: '',
+  currentPage: 1
 }
 
 export default handleActions(
@@ -116,7 +117,8 @@ export default handleActions(
     }),
     [SEARCH_COMPONENT_SUCCESS]: (state, action) => ({
       ...state,
-      componentTypes: action.payload
+      componentTypes: action.payload,
+      currentPage: 1
     }),
     [SET_COMPONENT_TYPE_LOADING]: (state, action) => ({
       ...state,
@@ -149,6 +151,10 @@ export default handleActions(
     [SELECTED_COMPONENT_TYPE]: (state, action) => ({
       ...state,
       selectedComponentType: action.payload
+    }),
+    [SET_CURRENT_PAGE]: (state, action) => ({
+      ...state,
+      currentPage: action.payload
     })
   },
   initialState

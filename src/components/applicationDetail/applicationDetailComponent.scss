@@ -42,3 +42,9 @@ padding: 25px;
     /* text-align: center; */
     margin-left: 15px;
   } 
+
+  a.disabled {
+    /* Make the disabled links grayish*/
+    color: gray;
+    pointer-events: none;
+}

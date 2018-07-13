@@ -7,8 +7,8 @@ import styles from './applicationModelComponent.scss'
 
     var Shape = joint.dia.Element.define('graph.Shape', {
     size: {
-        width: 120,
-        height: 60
+        width: 100,
+        height: 40
     },
     attrs: {
         rect: {
@@ -27,7 +27,7 @@ import styles from './applicationModelComponent.scss'
             yAlignment: 'middle',
             xAlignment: 'middle',
             'text-anchor': 'middle',
-            fontSize: 12
+            fontSize: 8
         }
     }
     }, {
@@ -91,7 +91,7 @@ import styles from './applicationModelComponent.scss'
                 textAnchor: 'middle',
                 refY: 5,
                 refY2: '-60%',
-                fontSize: 12,
+                fontSize: 8,
                 cursor: 'pointer',
                 fontFamily: 'sans-serif'
             }
@@ -154,11 +154,7 @@ import styles from './applicationModelComponent.scss'
         var paper = this.options.paper
         var graph = paper.model
         var cells = this.options.cells
-
-        // joint.layout.DirectedGraph.layout(cells, this.getLayoutOptions());
-
-        var gBox = joint.layout.DirectedGraph.layout(cells, this.getLayoutOptions())
-        console.log('gBox', gBox)
+        joint.layout.DirectedGraph.layout(cells, this.getLayoutOptions())
 
         if (graph.getCells().length === 0) {
             // The graph could be empty at the beginning to avoid cells rendering
@@ -224,7 +220,6 @@ import styles from './applicationModelComponent.scss'
                 links.push(link)
             })
         }
-        console.log('buildGraph', links)
         // Links must be added after all the elements. This is because when the links
         // are added to the graph, link source/target
         // elements must be in the graph already.
@@ -235,83 +230,58 @@ import styles from './applicationModelComponent.scss'
 
     var LinkControls = joint.mvc.View.extend({
 
-    highlighter: {
-        name: 'stroke',
-        options: {
-            attrs: {
-                'stroke': 'lightcoral',
-                'stroke-width': 4
+        highlighter: {
+            name: 'stroke',
+            options: {
+                attrs: {
+                    'stroke': 'lightcoral',
+                    'stroke-width': 4
+                }
             }
+        },
+        events: {
+            change: 'updateLink',
+            input: 'updateLink'
+        },
+        init: function () {
+            this.highlight()
+            this.updateControls()
+        },
+        onRemove: function () {
+            this.unhighlight()
+        },
+        highlight: function () {
+          // console.log('highlited');
+          // cellView.highlight();
+            this.options.cellView.highlight('rect', { highlighter: this.highlighter })
+        },
+        unhighlight: function () {
+            this.options.cellView.unhighlight('rect', { highlighter: this.highlighter })
         }
-    },
-
-    events: {
-        change: 'updateLink',
-        input: 'updateLink'
-    },
-
-    init: function () {
-        this.highlight()
-        this.updateControls()
-    },
-
-    onRemove: function () {
-        this.unhighlight()
-    },
-
-    highlight: function () {
-        // console.log('highlited');
-        // cellView.highlight();
-        this.options.cellView.highlight('rect', { highlighter: this.highlighter })
-    },
-
-    unhighlight: function () {
-        this.options.cellView.unhighlight('rect', { highlighter: this.highlighter })
-    }
-
     }, {
-
-    remove: function () {
-        if (this.instance) {
-            this.instance.remove()
-            this.instance = null
-        }
-    },
-
-    refresh: function () {
-        if (this.instance) {
-            this.instance.unhighlight()
-            this.instance.highlight()
-        }
-    },
-
-    instance: null,
-
-    template: ''// document.getElementById('link-controls-template').content
-
+        remove: function () {
+            if (this.instance) {
+                this.instance.remove()
+                this.instance = null
+            }
+        },
+        refresh: function () {
+            if (this.instance) {
+                this.instance.unhighlight()
+                this.instance.highlight()
+            }
+        },
+        instance: null,
+        template: ''// document.getElementById('link-controls-template').content
     })
 
 class ApplicationModelComponent extends React.Component {
-    construct (props) {
-        console.log('application model construct props', this.props)
-    }
-
-    componentWillMount () {
-        console.log('application model will mount props', this.props)
-    }
-    componentDidMount () {
-        console.log('application model did mount props', this.props)
-        // console.log('model11111', this)
-        // console.log(this.linkArray)
-        // console.log(this.nodeArray)
-    }
+    construct (props) {}
+    componentWillMount () {}
+    componentDidMount () {}
     componentWillReceiveProps (nextProps) {
         if (nextProps.componentConstraints !== this.props.componentConstraints) {
-          // Perform some operation
-            console.log('receive props', nextProps.componentConstraints)
-            console.log(this.props)
             let nodeData = nextProps.componentConstraints
-            console.log('node data', nodeData)
             let firstNodeSet = false
             let nodeArray = []
             let linkArray = []
@@ -319,7 +289,6 @@ class ApplicationModelComponent extends React.Component {
 
             if (typeof (nodeData) !== 'undefined') {
                 nodeData.forEach(function (data, index) {
-                    console.log('data', data)
                     var node = {}
                 if (!firstNodeSet) {
                     node.Id = nodeData.length + 1
@@ -329,7 +298,6 @@ class ApplicationModelComponent extends React.Component {
                     nodeArray.push(node)
                     firstNodeSet = true
                 }
-                console.log('node', node)
                 node = {}
                 node.Id = data.resource.id
                 node.Name = data.resource.target_component_type_name
@@ -339,28 +307,24 @@ class ApplicationModelComponent extends React.Component {
                 let link = {}
                 link.Id = data.resource.id
                 link.Title = data.resource.name
-                if (data.resource.type === 'Child') {
-                    link.StartComponentId = 17
+                if (data.resource.constraint_type === 'Child') {
+                    link.StartComponentId = nodeData.length + 1
                     link.EndComponentId = data.resource.id
-                } else if (data.resource.type === 'ConnectFrom') {
-                    link.StartComponentId = 17
+                } else if (data.resource.constraint_type === 'ConnectFrom') {
+                    link.StartComponentId = nodeData.length + 1
                     link.EndComponentId = data.resource.id
-                } else if (data.resource.type === 'ConnectTo') {
+                } else if (data.resource.constraint_type === 'ConnectTo') {
                     link.StartComponentId = data.resource.id
-                    link.EndComponentId = 17
+                    link.EndComponentId = nodeData.length + 1
                 }
-                console.log('index', index)
                 linkArray.push(link)
                 if (index === nodeData.length - 1) {
-                    console.log('model11111', this)
-                    console.log(linkArray)
-                    console.log(nodeArray)
                     let controls = new LayoutControls({
                         paper: new joint.dia.Paper({
                             el: ReactDOM.findDOMNode(that.refs.placeholder),
                             gridSize: 1,
-                            height: 362,
-                            width: 600,
+                            height: 300,
+                            width: 400,
                             interactive: function (cellView) {
                                 // linkMove: false
                                 // return cellView.model.isElement();

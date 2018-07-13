@@ -6,29 +6,80 @@ import PropTypes from 'prop-types'
 export default function ComponentType (props) {
   console.log('-com-', props)
     let searchTextBox
-    let componentTypes = props.componentTypes
+    let componentTypes = props.componentTypes.data
     let componentTypesList
-    console.log('com types', componentTypes)
-    if (componentTypes !== '') {
-      componentTypesList = componentTypes.map(function (componentType) {
+    let totalNoPages
+    let perPage = 10
+    let currentPage = props.currentPage
+    let nextClass = ''
+    let previousClass = ''
+    let totalComponentType
+
+    // console.log('com types', componentTypes)
+    if (typeof componentTypes !== 'undefined') {
+      componentTypesList = componentTypes.map(function (componentType, index) {
         let iconlink = componentType._links.find(function (link) { return link.rel === 'icon_id' })
         return (
-          <li><img src={iconlink.href} alt={componentType.resource.name} /><br />
+          <li key={index} ><img src={iconlink.href} alt={componentType.resource.name} /><br />
             <a href={'/' + componentType.resource.id}>{componentType.resource.name}</a>
           </li>
         )
       })
+
+      totalComponentType = props.componentTypes.total_record_count
+      totalNoPages = Math.ceil(totalComponentType / perPage)
+
+      if (currentPage === 1) {
+        previousClass = styles.disabled
+      }
+
+      if (currentPage === totalNoPages) {
+        nextClass = styles.disabled
+      }
     }
 
     let handleInputChange = function (event) {
       // props.setSearchComponentType(searchTextBox.value)
       let payload = {
-        'search': searchTextBox.value ? searchTextBox.value : ''
+        'search': searchTextBox.value ? searchTextBox.value : '',
+        'page_size': 10,
+        'page': currentPage
       }
       if (searchTextBox.value.length >= 0) {
         props.searchComponent(payload)
-        props.setComponentTypeLoading(true)
+        // props.setComponentTypeLoading(true)
       }
+    }
+
+    let handlePrevious = function (event) {
+      event.preventDefault()
+      if (currentPage === 1) {
+        previousClass = styles.disabled
+      } else {
+        props.setCurrentPage(currentPage - 1)
+      }
+      // call api
+      let payload = {
+        'search': searchTextBox.value ? searchTextBox.value : '',
+        'page_size': 10,
+        'page': currentPage
+      }
+      props.fetchComponent(payload)
+    }
+
+    let handleNext = function (event) {
+      event.preventDefault()
+      if (currentPage === totalNoPages) {
+        nextClass = styles.disabled
+      } else {
+        props.setCurrentPage(currentPage + 1)
+      }
+      let payload = {
+        'search': searchTextBox.value ? searchTextBox.value : '',
+        'page_size': 10,
+        'page': currentPage
+      }
+      props.fetchComponent(payload)
     }
 
   return (
@@ -59,10 +110,12 @@ export default function ComponentType (props) {
 
       {!props.isComponentTypeLoading && (
       <div>
-        <ul>{componentTypesList}</ul>
-        <ul className='pagination  justify-content-center'>
-          <li className='active'><a href=''>1</a></li>
-        </ul>
+        <div>
+          <ul>{componentTypesList}</ul>
+        </div>
+        <div className='text-center justify-content-center'>
+          <a href='' className={previousClass} onClick={handlePrevious}>Previous</a> Page {currentPage} of {totalNoPages} <a href='' className={nextClass} onClick={handleNext}>Next</a>
+        </div>
       </div>
       )}
     </div>
@@ -71,9 +124,10 @@ export default function ComponentType (props) {
 
 ComponentType.propTypes = {
   componentTypes: PropTypes.any,
-  // searchComponentType: PropTypes.any,
-  searchComponent: PropTypes.func,
-  // setSearchComponentType: PropTypes.func,
-  setComponentTypeLoading: PropTypes.func,
-  isComponentTypeLoading: PropTypes.any
+  // searchComponent: PropTypes.func,
+  // setComponentTypeLoading: PropTypes.func,
+  isComponentTypeLoading: PropTypes.any,
+  currentPage: PropTypes.any,
+  setCurrentPage: PropTypes.func,
+  fetchComponent: PropTypes.func
 }

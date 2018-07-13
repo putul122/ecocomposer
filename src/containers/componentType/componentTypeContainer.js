@@ -11,7 +11,8 @@ export function mapStateToProps (state, props) {
   return {
     componentTypes: state.basicReducer.componentTypes,
     searchComponentType: state.basicReducer.searchComponentType,
-    isComponentTypeLoading: state.basicReducer.isComponentTypeLoading
+    isComponentTypeLoading: state.basicReducer.isComponentTypeLoading,
+    currentPage: state.basicReducer.currentPage
   }
 }
 
@@ -20,7 +21,8 @@ export const propsMapping: Callbacks = {
   fetchComponent: sagaActions.componentTypeActions.fetchComponent,
   searchComponent: sagaActions.componentTypeActions.searchComponent,
   setSearchComponentType: actionCreators.setSearchComponentType,
-  setComponentTypeLoading: actionCreators.setComponentTypeLoading
+  setComponentTypeLoading: actionCreators.setComponentTypeLoading,
+  setCurrentPage: actionCreators.setCurrentPage
 }
 
 // If you want to use the function mapping
@@ -35,7 +37,12 @@ export default compose(
   lifecycle({
     componentWillMount: function () {
     this.props.setComponentTypeLoading && this.props.setComponentTypeLoading(true)
-    this.props.fetchComponent && this.props.fetchComponent()
+    let payload = {
+      'search': '',
+      'page_size': 10,
+      'page': 1
+    }
+    this.props.fetchComponent && this.props.fetchComponent(payload)
     },
     componentDidMount: function () {
     // Block
@@ -49,7 +56,7 @@ export default compose(
     },
     componentWillReceiveProps: function () {
       console.log('component will  update')
-      // this.props.setComponentTypeLoading && this.props.setComponentTypeLoading(true)
+      // this.props.setComponentTypeLoading && this.props.setComponentTypeLoading(false)
     }
   })
 )(ComponentType)

@@ -17,8 +17,18 @@ export default function ApplicationActivity (props) {
         return ' @' + reference
       })
       let userIconlink = activityMessage._links.find(function (link) { return link.rel === 'user_icon_id' })
+      // return (
+      //   <li><img src={userIconlink.href} alt={activityMessage.resource.user} /><a href=''>{mentionNames.toString()}</a>{activityMessage.resource.name}<a href=''>{referenceNames.toString()}</a></li>
+      // )
       return (
-        <li><img src={userIconlink.href} alt={activityMessage.resource.user} /><a href=''>{mentionNames.toString()}</a>{activityMessage.resource.name}<a href=''>{referenceNames.toString()}</a></li>
+        <li>
+          <div >
+            <ul className={styles.groupspace}>
+              <img src={activityMessage ? activityMessage._links[1].href : ''} alt={activityMessage ? activityMessage.resource.context : ''} /><a href=''>{activityMessage ? activityMessage.resource.context : ''}</a>::<a href=''>{activityMessage ? activityMessage.resource.discussion : ''}</a>
+              <li><img src={userIconlink.href} alt={activityMessage.resource.user} /><a href=''>{mentionNames.toString()}</a>{activityMessage.resource.name}<a href=''>{referenceNames.toString()}</a></li>
+            </ul>
+          </div>
+        </li>
       )
     })
   }
@@ -27,12 +37,15 @@ export default function ApplicationActivity (props) {
     <div className={styles.activityline}>
       <h2>Activity Feed </h2>
       <ul>
-        <li>
-          <div className={styles.groupspace}>
-            <img src={activityMessages ? activityMessages[0]._links[1].href : ''} alt={activityMessages ? activityMessages[0].resource.context : ''} /><a href=''>{activityMessages ? activityMessages[0].resource.context : ''}</a>::<a href=''>{activityMessages ? activityMessages[0].resource.discussion : ''}</a>
-            <ul>{activityMessagesList}</ul>
+        {activityMessagesList}
+        {/* <li>
+          <div >
+            <ul className={styles.groupspace}>
+              <img src={activityMessages ? activityMessages[0]._links[1].href : ''} alt={activityMessages ? activityMessages[0].resource.context : ''} /><a href=''>{activityMessages ? activityMessages[0].resource.context : ''}</a>::<a href=''>{activityMessages ? activityMessages[0].resource.discussion : ''}</a>
+              <li><img src={userIconlink.href} alt={activityMessage.resource.user} /><a href=''>{mentionNames.toString()}</a>{activityMessage.resource.name}<a href=''>{referenceNames.toString()}</a></li>
+            </ul>
           </div>
-        </li>
+        </li> */}
         {/* <li>
           <div className={styles.groupspace}>
             <ul>

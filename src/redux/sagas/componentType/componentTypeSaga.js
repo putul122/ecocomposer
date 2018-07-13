@@ -23,7 +23,6 @@ export const actionCreators = {
 }
 
 export default function * watchComponentType () {
-  console.log('component process watch')
   yield [
     takeLatest(FETCH_COMPONENT, getComponents),
     takeLatest(SEARCH_COMPONENT, searchComponents)
@@ -34,11 +33,9 @@ export function * getComponents (action) {
   try {
     const componentTypes = yield call(
       axios.get,
-      'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types'
+      'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types?search=&page=' + action.payload.page + '&page_size=' + action.payload.page_size + '&recommended=true'
     )
-    console.log('Component Types', componentTypes)
-    console.log('Component action', action)
-    yield put(actionCreators.fetchComponentSuccess(componentTypes.data.data))
+    yield put(actionCreators.fetchComponentSuccess(componentTypes.data))
   } catch (error) {
     yield put(actionCreators.fetchComponentFailure(error))
   }
@@ -48,10 +45,9 @@ export function * searchComponents (action) {
   try {
     const componentTypes = yield call(
       axios.get,
-      'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types?search=' + action.payload.search + '&page=1&page_size=1'
+      'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types?search=' + action.payload.search + '&page=' + action.payload.page + '&page_size=' + action.payload.page_size
     )
-    console.log('Component Types search action', action.payload.search)
-    yield put(actionCreators.searchComponentSuccess(componentTypes.data.data))
+    yield put(actionCreators.searchComponentSuccess(componentTypes.data))
   } catch (error) {
     yield put(actionCreators.searchomponentFailure(error))
   }

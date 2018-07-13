@@ -70,10 +70,9 @@ export function * getComponentComponent (action) {
     try {
       const componentComponents = yield call(
         axios.get,
-        'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types/' + action.payload.id + '/components',
-        action.payload.recommendedComponent
+        'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types/' + action.payload.id + '/components?search=' + action.payload.ComponentTypeComponent.search + '&page_size=' + action.payload.ComponentTypeComponent.page_size + '&page=' + action.payload.ComponentTypeComponent.page + '&recommended=true'
       )
-      yield put(actionCreators.fetchComponentComponentSuccess(componentComponents.data.data))
+      yield put(actionCreators.fetchComponentComponentSuccess(componentComponents.data))
     } catch (error) {
       yield put(actionCreators.fetchComponentComponentFailure(error))
     }
@@ -83,10 +82,10 @@ export function * searchComponentComponent (action) {
   try {
     const componentComponents = yield call(
       axios.get,
-      'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types/' + action.payload.id + '/components?search=' + action.payload.searchComponent.search + '&page_size=' + action.payload.searchComponent.page_size + '&page=' + action.payload.searchComponent.page + '&recommended=false'
+      'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types/' + action.payload.id + '/components?search=' + action.payload.ComponentTypeComponent.search + '&page_size=' + action.payload.ComponentTypeComponent.page_size + '&page=' + action.payload.ComponentTypeComponent.page + '&recommended=false'
     )
     console.log('Component Components search action', action.payload)
-    yield put(actionCreators.searchComponentComponentSuccess(componentComponents.data.data))
+    yield put(actionCreators.searchComponentComponentSuccess(componentComponents.data))
   } catch (error) {
     yield put(actionCreators.searchComponentComponentFailure(error))
   }

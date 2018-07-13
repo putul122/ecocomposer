@@ -16,7 +16,6 @@ export const actionCreators = {
 }
 
 export default function * watchRegisterProcess () {
-  console.log('registe process watch')
   yield takeLatest(FETCH_REGISTER_PROCESS, getRegisterProcess)
 }
 

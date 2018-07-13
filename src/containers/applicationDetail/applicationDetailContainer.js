@@ -9,7 +9,8 @@ export function mapStateToProps (state, props) {
   return {
     componentDetail: state.basicReducer.componentDetail,
     componentConstraints: state.basicReducer.componentConstraints,
-    componentComponents: state.basicReducer.componentComponents
+    componentComponents: state.basicReducer.componentComponents,
+    currentPage: state.basicReducer.currentPage
   }
 }
 // In Object form, each funciton is automatically wrapped in a dispatch
@@ -18,7 +19,8 @@ export const propsMapping: Callbacks = {
   fetchComponentConstraint: sagaActions.applicationDetailActions.fetchComponentConstraint,
   fetchComponentComponent: sagaActions.applicationDetailActions.fetchComponentComponent,
   searchComponentComponent: sagaActions.applicationDetailActions.searchComponentComponent,
-  selectedComponentType: actionCreators.selectedComponentType
+  selectedComponentType: actionCreators.selectedComponentType,
+  setCurrentPage: actionCreators.setCurrentPage
 }
 
 // If you want to use the function mapping
@@ -36,11 +38,10 @@ export default compose(
       this.props.selectedComponentType(componentTypeId)
       let payload = {
         'id': componentTypeId,
-        'recommendedComponent': {
+        'ComponentTypeComponent': {
           'search': '',
-          'page_size': 5,
-          'page': 1,
-          'recommended': true
+          'page_size': 10,
+          'page': 1
         }
       }
       this.props.fetchComponentById && this.props.fetchComponentById(payload)

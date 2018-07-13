@@ -7,31 +7,21 @@ import ApplicationActivity from '../../containers/applicationActivity/applicatio
 import Modal from 'react-modal'
 const customStyles = {
   content: {
-    top: '60%',
+    top: '80%',
     left: '70%',
     right: 'auto',
     bottom: 'auto',
-    transform: 'translate(0%, -80%)'
+    transform: 'translate(0%, -60%)'
   }
 }
 
 export default function HeaderComponent (props) {
-  console.log('header islogged in', props.isLoggedin)
-  // this.state = {
-  //   modalIsOpen: false
-  // }
-  // this.openModal = this.openModal.bind(this)
-  // this.afterOpenModal = this.afterOpenModal.bind(this)
-  // this.closeModal = this.closeModal.bind(this)
-
   let openModal = function (event) {
     event.preventDefault()
-    // this.setState({modalIsOpen: true})
     props.setModalOpenStatus(true)
   }
 
   let closeModal = function () {
-    // this.setState({modalIsOpen: false})
     props.setModalOpenStatus(false)
   }
 
@@ -89,7 +79,7 @@ export default function HeaderComponent (props) {
                       </Modal>
                     </div>
                   </li>
-                  <li className='m-nav__item m-topbar__user-profile  m-dropdown m-dropdown--medium m-dropdown--arrow  m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light' m-dropdown-toggle='click'>
+                  <li className='m-nav__item m-topbar__user-profile  m-dropdown m-dropdown--medium m-dropdown--arrow  m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light' >
                     <a href='' className='m-nav__link m-dropdown__toggle'>
                       <span className='m-topbar__userpic m--hide'>
                         <img src='assets/app/media/img/users/user4.jpg' className='m--img-rounded m--marginless m--img-centered' alt='' />

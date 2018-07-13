@@ -33,29 +33,26 @@ ul{
 a{
 	color:#22b9ff;
 	font-size:13px; 
-	// text-decoration:none; 
 	margin-left: 5px;
 }
 
 .activityline{
-	border: 4px solid #f7f7fa;
 	border-radius: 10px;
-	// margin-top: 20px;
-	padding: 20px;
-	height: 500px;
-	// overflow-y: scroll;
-	// margin-left: 35px;
+	height: 750px;
+	overflow-y: scroll;
 	background: #fff;
 
 }
 .activityline h2{
-	margin-left: 12px;
+	margin-left: 20px;
 }
 .activityline ul li{
 	list-style: none;
-	display: inline-block;
-    padding: 3px;
+	padding: 3px;
 	text-align: justify;
+}
+.activityline ul li:nth-child(3n){
+	margin-bottom: 30px;
 }
 .iconcenter{
 	font-size: 15px;

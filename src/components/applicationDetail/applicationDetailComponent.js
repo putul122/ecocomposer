@@ -1,31 +1,37 @@
 import React from 'react'
 import styles from './applicationDetailComponent.scss'
 import PropTypes from 'prop-types'
+// import ApplicationModelComponent for graph Model Visualization
 import ApplicationModelComponent from '../applicationModel/applicationModelComponent'
 
 var divStyle = {
-  width: '400px',
-  height: '590px',
-  'overflow-x': 'scroll',
-  'overflow-y': 'scroll'
+  width: '95%',
+  height: '400px',
+  'overflow-y': 'scroll',
+  'overflow-x': 'scroll'
 }
 
 export default function ApplicationDetail (props) {
-  console.log('app comp', props)
   let ComponentName = ''
   let ComponentDescription = ''
   let searchTextBox
-  let componentComponents = props.componentComponents
+  let componentComponents = props.componentComponents.data
   let componentComponentsList
+  let totalNoPages
+  let perPage = 10
+  let currentPage = props.currentPage
+  let nextClass = ''
+  let previousClass = ''
+  let totalComponentTypeComponent
 
   if (props.componentDetail !== '') {
     ComponentName = props.componentDetail.resource.name
     ComponentDescription = props.componentDetail.resource.description
   }
-  if (componentComponents !== '') {
-    componentComponentsList = componentComponents.map(function (componentComponent) {
+  if (typeof componentComponents !== 'undefined') {
+    componentComponentsList = componentComponents.map(function (componentComponent, index) {
       return (
-        <tr role='row' className='odd'>
+        <tr role='row' className='odd' key={index} >
           <td className='sorting_1' >
             <div className='m-card-user m-card-user--sm'>
               <div className='m-card-user__details'>
@@ -37,15 +43,63 @@ export default function ApplicationDetail (props) {
         </tr>
       )
     })
+
+    totalComponentTypeComponent = props.componentComponents.total_record_count
+    totalNoPages = Math.ceil(totalComponentTypeComponent / perPage)
+
+    if (currentPage === 1) {
+      previousClass = styles.disabled
+    }
+
+    if (currentPage === totalNoPages) {
+      nextClass = styles.disabled
+    }
+  }
+
+  let handlePrevious = function (event) {
+    event.preventDefault()
+    if (currentPage === 1) {
+      previousClass = styles.disabled
+    } else {
+      props.setCurrentPage(currentPage - 1)
+    }
+    // call api
+    let payload = {
+      'id': props.componentDetail.resource.id,
+      'ComponentTypeComponent': {
+        'search': searchTextBox.value ? searchTextBox.value : '',
+        'page_size': 10,
+        'page': currentPage
+      }
+    }
+    props.fetchComponentComponent(payload)
+  }
+
+  let handleNext = function (event) {
+    event.preventDefault()
+    if (currentPage === totalNoPages) {
+      nextClass = styles.disabled
+    } else {
+      props.setCurrentPage(currentPage + 1)
+    }
+    let payload = {
+      'id': props.componentDetail.resource.id,
+      'ComponentTypeComponent': {
+        'search': searchTextBox.value ? searchTextBox.value : '',
+        'page_size': 10,
+        'page': currentPage
+      }
+    }
+    props.fetchComponentComponent(payload)
   }
 
   let handleInputChange = function (event) {
     let payload = {
       'id': props.componentDetail.resource.id,
-      'searchComponent': {
+      'ComponentTypeComponent': {
         'search': searchTextBox.value ? searchTextBox.value : '',
-        'page_size': 5,
-        'page': 1,
+        'page_size': 10,
+        'page': currentPage,
         'recommended': false
       }
     }
@@ -56,7 +110,6 @@ export default function ApplicationDetail (props) {
       // }
     }
   }
-
   return (
     <div className={styles.borderline}>
       <div className={styles.description}>
@@ -93,17 +146,6 @@ export default function ApplicationDetail (props) {
                   </tr>
                 </thead>
                 <tbody>
-                  {/* <tr role='row' className='odd'>
-                    <td className='sorting_1' >
-                      <div className='m-card-user m-card-user--sm'>
-                        <div className='m-card-user__details'>
-                          <span className='m-card-user__name'>Cherish Peplay</span>
-                           <a href='' className='m-card-user__email m-link'>McCullough-Gibson</a>
-                        </div>
-                      </div>
-                    </td>
-                    <td><p>The description about app </p></td>
-                  </tr> */}
                   { componentComponentsList }
                 </tbody>
               </table>
@@ -112,24 +154,14 @@ export default function ApplicationDetail (props) {
               <div id='divPaperWrapper' style={divStyle}>
                 <ApplicationModelComponent {...props} />
               </div>
-              {/* <img alt='bummy' src='/assets/image.png' className='diagram' /> */}
             </div>
           </div>
           <div className='row'>
             <div className='col-sm-6 col-md-5'>
-              <div className='dataTables_info' id='m_table_1_info' role='status' aria-live='polite'>Showing 1 to 10 of 50 entries</div>
-            </div>
-            {/* <div className='col-sm-6 col-md-2'>
-              <div className='dataTables_paginate paging_simple_numbers' id='m_table_1_paginate'>
-                <ul className='pagination'>
-                  <li className='paginate_button page-item previous disabled' id='m_table_1_previous'><a href='index.html' aria-controls='m_table_1' data-dt-idx='0' tabIndex='0' className='page-link'><i className='la la-angle-left' /></a></li>
-                  <li className='paginate_button page-item active'><a href='extra.html' aria-controls='m_table_1' data-dt-idx='1' tabIndex='0' className='page-link'>1</a></li>
-                  <li className='paginate_button page-item '><a href='extra.html' aria-controls='m_table_1' data-dt-idx='2' tabIndex='0' className='page-link'>2</a></li>
-                  <li className='paginate_button page-item '><a href='extra.html' aria-controls='m_table_1' data-dt-idx='3' tabIndex='0' className='page-link'>3</a></li>
-                  <li className='paginate_button page-item next' id='m_table_1_next'><a href='index.html' aria-controls='m_table_1' data-dt-idx='6' tabIndex='0' className='page-link'><i className='la la-angle-right' /></a></li>
-                </ul>
+              <div className='text-center justify-content-center'>
+                <a href='' className={previousClass} onClick={handlePrevious}>Previous</a> Page {currentPage} of {totalNoPages} <a href='' className={nextClass} onClick={handleNext}>Next</a>
               </div>
-            </div> */}
+            </div>
           </div>
         </div>
       </div>
@@ -140,5 +172,8 @@ export default function ApplicationDetail (props) {
 ApplicationDetail.propTypes = {
   componentDetail: PropTypes.any,
   componentComponents: PropTypes.any,
-  searchComponentComponent: PropTypes.func
+  searchComponentComponent: PropTypes.func,
+  currentPage: PropTypes.any
+  // setCurrentPage: PropTypes.func,
+  // fetchComponentComponent: PropTypes.func
 }
