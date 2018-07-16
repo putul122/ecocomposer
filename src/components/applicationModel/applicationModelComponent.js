@@ -27,7 +27,7 @@ import styles from './applicationModelComponent.scss'
             yAlignment: 'middle',
             xAlignment: 'middle',
             'text-anchor': 'middle',
-            fontSize: 8
+            fontSize: 10
         }
     }
     }, {
@@ -54,12 +54,12 @@ import styles from './applicationModelComponent.scss'
     attrs: {
         '.connection': {
             stroke: 'black',
-            strokeWidth: 2,
+            strokeWidth: 1,
             cursor: 'pointer',
             // pointerEvents: 'none',
             targetMarker: {
                 type: 'path',
-                fill: 'black',
+                fill: 'gray',
                 stroke: 'none',
                 d: 'M 8 -8 0 0 8 8 z'
             }
@@ -87,11 +87,11 @@ import styles from './applicationModelComponent.scss'
         },
         attrs: {
             text: {
-                fill: 'gray',
+                fill: 'black',
                 textAnchor: 'middle',
                 refY: 5,
                 refY2: '-60%',
-                fontSize: 8,
+                fontSize: 10,
                 cursor: 'pointer',
                 fontFamily: 'sans-serif'
             }

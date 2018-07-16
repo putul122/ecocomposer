@@ -6,7 +6,7 @@ import ApplicationModelComponent from '../applicationModel/applicationModelCompo
 
 var divStyle = {
   width: '95%',
-  height: '400px',
+  height: '30%',
   'overflow-y': 'scroll',
   'overflow-x': 'scroll'
 }
@@ -61,18 +61,17 @@ export default function ApplicationDetail (props) {
     if (currentPage === 1) {
       previousClass = styles.disabled
     } else {
+      let payload = {
+        'id': props.componentDetail.resource.id,
+        'ComponentTypeComponent': {
+          'search': searchTextBox.value ? searchTextBox.value : '',
+          'page_size': 10,
+          'page': currentPage - 1
+        }
+      }
+      props.fetchComponentComponent(payload)
       props.setCurrentPage(currentPage - 1)
     }
-    // call api
-    let payload = {
-      'id': props.componentDetail.resource.id,
-      'ComponentTypeComponent': {
-        'search': searchTextBox.value ? searchTextBox.value : '',
-        'page_size': 10,
-        'page': currentPage
-      }
-    }
-    props.fetchComponentComponent(payload)
   }
 
   let handleNext = function (event) {
@@ -80,17 +79,17 @@ export default function ApplicationDetail (props) {
     if (currentPage === totalNoPages) {
       nextClass = styles.disabled
     } else {
-      props.setCurrentPage(currentPage + 1)
-    }
-    let payload = {
+      let payload = {
       'id': props.componentDetail.resource.id,
       'ComponentTypeComponent': {
         'search': searchTextBox.value ? searchTextBox.value : '',
         'page_size': 10,
-        'page': currentPage
+        'page': currentPage + 1
       }
     }
     props.fetchComponentComponent(payload)
+      props.setCurrentPage(currentPage + 1)
+    }
   }
 
   let handleInputChange = function (event) {
@@ -112,59 +111,69 @@ export default function ApplicationDetail (props) {
   }
   return (
     <div className={styles.borderline}>
-      <div className={styles.description}>
+      <div className={'row' + styles.description}>
         <i className={styles.iconcenter + ' fa fa-share'} />
         <div>
           <h2>{ ComponentName }</h2>
           <p>{ ComponentDescription }</p>
         </div>
       </div>
-      <div className='m-portlet__body'>
-        <div id='m_table_1_wrapper' className='dataTables_wrapper container-fluid dt-bootstrap4 no-footer'>
-          <div className='row clearfix'>
-            <div className='col-sm-6 col-md-6'>
-              <div className={styles.searchdetail}>
-                <h4>{ ComponentName }</h4>
-                <div className={styles.containersearch}>
-                  <span className={styles.icon}><i className='fa fa-search' /></span>
-                  <input type='search' id='search' placeholder='Search...' className={styles.round} ref={input => (searchTextBox = input)} onChange={handleInputChange} />
-                </div>
-              </div>
-            </div>
-            <div className='col-sm-6 col-md-6'>
-              <h4>{ ComponentName } Model Usage Summary</h4>
-              {/* <div id='m_table_1_filter' className='dataTables_filter'><label>Search:<input type='search' className='form-control form-control-sm' placeholder='' aria-controls='m_table_1'></label></div> */}
-            </div>
-          </div>
+      <div className='row clearfix'>
+        <div className='col-sm-12 col-md-3'>
           <div className='row'>
-            <div className='col-sm-6'>
-              <table className='table table-striped- table-bordered table-hover table-checkable dataTable no-footer dtr-inline' id='m_table_1' role='grid' aria-describedby='m_table_1_info' >
-                <thead>
-                  <tr role='row'>
-                    <th className='sorting_asc' tabIndex='0' aria-controls='m_table_1' rowSpan='1' colSpan='1' aria-sort='ascending' aria-label='Agent: activate to sort column descending'>Name</th>
-                    <th className='sorting' tabIndex='0' aria-controls='m_table_1' rowSpan='1' colSpan='1' aria-label='CompanyEmail: activate to sort column ascending'>Description</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  { componentComponentsList }
-                </tbody>
-              </table>
+            <div className='col-sm-6 col-md-4'>
+              <h6>{ ComponentName }</h6>
             </div>
-            <div className='col-sm-6'>
-              <div id='divPaperWrapper' style={divStyle}>
-                <ApplicationModelComponent {...props} />
+            <div className='col-sm-6 col-md-8 m--align-right'>
+              <div className='m-input-icon m-input-icon--left'>
+                <input type='text' className='form-control m-input' placeholder='Search...' id='generalSearch' ref={input => (searchTextBox = input)} onChange={handleInputChange} />
+                <span className='m-input-icon__icon m-input-icon__icon--left'>
+                  <span>
+                    <i className='la la-search' />
+                  </span>
+                </span>
               </div>
             </div>
           </div>
-          <div className='row'>
-            <div className='col-sm-6 col-md-5'>
-              <div className='text-center justify-content-center'>
+          {/* <div className={styles.containersearch}>
+            <span className={styles.icon}><i className='fa fa-search' /></span>
+            <input type='search' id='search' placeholder='Search...' className={styles.round} ref={input => (searchTextBox = input)} onChange={handleInputChange} />
+          </div> */}
+          <div className='row col-sm-12 col-md-12'>
+            <table className='datatable' >
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                { componentComponentsList }
+              </tbody>
+            </table>
+          </div>
+          <div className='row col-sm-12 col-md-12'>
+            <div className=''>
+              <div className=''>
                 <a href='' className={previousClass} onClick={handlePrevious}>Previous</a> Page {currentPage} of {totalNoPages} <a href='' className={nextClass} onClick={handleNext}>Next</a>
               </div>
             </div>
           </div>
         </div>
+        <div className='col-sm-9 col-md-9'>
+          <h4>{ ComponentName } Model Usage Summary</h4>
+          {/* <div id='m_table_1_filter' className='dataTables_filter'><label>Search:<input type='search' className='form-control form-control-sm' placeholder='' aria-controls='m_table_1'></label></div> */}
+          <div className='row'>
+            <div id='divPaperWrapper' style={divStyle}>
+              <ApplicationModelComponent {...props} />
+            </div>
+          </div>
+        </div>
       </div>
+      {/* <div className='m-portlet__body'>
+        <div id='m_table_1_wrapper' className='dataTables_wrapper container-fluid dt-bootstrap4 no-footer'>
+        </div>
+      </div> */}
     </div>
   )
 }

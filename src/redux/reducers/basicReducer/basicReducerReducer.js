@@ -16,6 +16,7 @@ const SET_COMPONENT_TYPE_LOADING = 'BasicReducer/SET_COMPONENT_TYPE_LOADING'
 const SET_MODAL_OPEN_STATUS = 'BasicReducer/SET_MODAL_OPEN_STATUS'
 const SELECTED_COMPONENT_TYPE = 'BasicReducer/SELECTED_COMPONENT_TYPE'
 const SET_CURRENT_PAGE = 'BasicReducer/SET_CURRENT_PAGE'
+const SET_QUICKSLIDE_FLAG = 'BasicReducer/SET_QUICKSLIDE_FLAG'
 
 export const actions = {
   INCREMENT,
@@ -36,7 +37,8 @@ export const actions = {
   SET_MODAL_OPEN_STATUS,
   ACTIVITY_MESSAGE_SUCCESS,
   SELECTED_COMPONENT_TYPE,
-  SET_CURRENT_PAGE
+  SET_CURRENT_PAGE,
+  SET_QUICKSLIDE_FLAG
 }
 
 export const actionCreators = {
@@ -49,7 +51,8 @@ export const actionCreators = {
   setComponentTypeLoading: createAction(SET_COMPONENT_TYPE_LOADING),
   setModalOpenStatus: createAction(SET_MODAL_OPEN_STATUS),
   selectedComponentType: createAction(SELECTED_COMPONENT_TYPE),
-  setCurrentPage: createAction(SET_CURRENT_PAGE)
+  setCurrentPage: createAction(SET_CURRENT_PAGE),
+  setQuickslideFlag: createAction(SET_QUICKSLIDE_FLAG)
 }
 
 export const initialState = {
@@ -69,7 +72,8 @@ export const initialState = {
   modalIsOpen: false,
   activityMessages: '',
   selectedComponentType: '',
-  currentPage: 1
+  currentPage: 1,
+  isQuickSlideOpen: false
 }
 
 export default handleActions(
@@ -155,6 +159,10 @@ export default handleActions(
     [SET_CURRENT_PAGE]: (state, action) => ({
       ...state,
       currentPage: action.payload
+    }),
+    [SET_QUICKSLIDE_FLAG]: (state, action) => ({
+      ...state,
+      isQuickSlideOpen: action.payload
     })
   },
   initialState

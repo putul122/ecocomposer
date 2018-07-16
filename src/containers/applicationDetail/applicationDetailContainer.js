@@ -35,6 +35,7 @@ export default compose(
   lifecycle({
     componentWillMount: function () {
       const componentTypeId = this.props.match.params.id
+      console.log('comp type id', componentTypeId)
       this.props.selectedComponentType(componentTypeId)
       let payload = {
         'id': componentTypeId,

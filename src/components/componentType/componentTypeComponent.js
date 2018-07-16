@@ -14,6 +14,7 @@ export default function ComponentType (props) {
     let nextClass = ''
     let previousClass = ''
     let totalComponentType
+    console.log('--------props----------', props)
 
     // console.log('com types', componentTypes)
     if (typeof componentTypes !== 'undefined') {
@@ -56,15 +57,14 @@ export default function ComponentType (props) {
       if (currentPage === 1) {
         previousClass = styles.disabled
       } else {
+        let payload = {
+          'search': searchTextBox.value ? searchTextBox.value : '',
+          'page_size': 10,
+          'page': currentPage - 1
+        }
+        props.fetchComponent(payload)
         props.setCurrentPage(currentPage - 1)
       }
-      // call api
-      let payload = {
-        'search': searchTextBox.value ? searchTextBox.value : '',
-        'page_size': 10,
-        'page': currentPage
-      }
-      props.fetchComponent(payload)
     }
 
     let handleNext = function (event) {
@@ -72,14 +72,15 @@ export default function ComponentType (props) {
       if (currentPage === totalNoPages) {
         nextClass = styles.disabled
       } else {
+        console.log('ccccppppppp', currentPage)
+        let payload = {
+          'search': searchTextBox.value ? searchTextBox.value : '',
+          'page_size': 10,
+          'page': currentPage + 1
+        }
+        props.fetchComponent(payload)
         props.setCurrentPage(currentPage + 1)
       }
-      let payload = {
-        'search': searchTextBox.value ? searchTextBox.value : '',
-        'page_size': 10,
-        'page': currentPage
-      }
-      props.fetchComponent(payload)
     }
 
   return (

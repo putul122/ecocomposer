@@ -17,7 +17,15 @@ export default function Register (props) {
   let PasswordBox
   let handleInput = function (event) {
     if (typeof (FullNameBox) !== 'undefined' && typeof (EmailBox) !== 'undefined' && typeof (PasswordBox) !== 'undefined') {
-      console.log(FullNameBox.value)
+      console.log('my full' + FullNameBox.value)
+      // let name = FullNameBox.value
+      // window.fcWidget.setExternalId(name + Math.random())
+      // window.fcWidget.user.setFirstName(name)
+      // window.fcWidget.user.setEmail(EmailBox.value)
+      // window.fcWidget.user.setProperties({
+      //   plan: 'Estate',                 // meta property 1
+      //   status: 'Active'                // meta property 2
+      // })
       let payload = {
         'email': EmailBox.value,
         'password': PasswordBox.value

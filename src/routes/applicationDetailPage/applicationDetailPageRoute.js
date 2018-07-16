@@ -16,10 +16,10 @@ class applicationDetailPageRoute extends React.Component {
       <div className='m-grid__item m-grid__item--fluid m-wrapper'>
         <div className='m-content'>
           <div className='row'>
-            <div className='col-md-8'>
+            <div className='col-sm-10'>
               <ApplicationDetail {...this.props} />
             </div>
-            <div className='col-md-4'>
+            <div className='col-sm-2'>
               <ApplicationActions />
               {/* <ApplicationActivity /> */}
             </div>

@@ -25,12 +25,21 @@ export const propsMapping: Callbacks = {
 export default compose(
   connect(mapStateToProps, propsMapping),
   lifecycle({
-    componentWillMount: function () {
-      console.log('component will mount lifecycle activity model', this.props)
-      let payload = {
-          'componentTypeId': this.props.selectedComponentType
+    // componentWillMount: function () {
+    //   console.log('component will mount lifecycle activity model', this.props)
+    //   console.log(this.state)
+    // //   let payload = {
+    // //       'componentTypeId': this.props.selectedComponentType
+    // //   }
+    // //   this.props.activityMessage(payload)
+    // },
+    componentWillReceiveProps: function (nextProps) {
+      if (nextProps.selectedComponentType && (nextProps.selectedComponentType !== this.props.selectedComponentType)) {
+        let payload = {
+         'componentTypeId': nextProps.selectedComponentType
+        }
+        this.props.activityMessage(payload)
       }
-      this.props.activityMessage(payload)
     }
   })
 )(ApplicationActivity)

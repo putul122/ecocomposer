@@ -7,12 +7,14 @@ import { actionCreators } from '../../redux/reducers/basicReducer/basicReducerRe
 export function mapStateToProps (state, props) {
   return {
     isLoggedin: state.basicReducer.isLoggedin,
-    modalIsOpen: state.basicReducer.modalIsOpen
+    modalIsOpen: state.basicReducer.modalIsOpen,
+    isQuickSlideOpen: state.basicReducer.isQuickSlideOpen
   }
 }
 // In Object form, each funciton is automatically wrapped in a dispatch
 export const propsMapping: Callbacks = {
-    setModalOpenStatus: actionCreators.setModalOpenStatus
+    setModalOpenStatus: actionCreators.setModalOpenStatus,
+    setQuickslideFlag: actionCreators.setQuickslideFlag
 }
 
 // If you want to use the function mapping
