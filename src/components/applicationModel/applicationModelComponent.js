@@ -137,7 +137,7 @@ import styles from './applicationModelComponent.scss'
     init: function () {
         var options = this.options
 
-        options.cells = this.buildGraph(options.nodes, options.connections)
+        options.cells = this.buildGraph(options.nodes, options.connections, options.centerNode)
 
         // if (options.adjacencyList) {
         //     options.cells = this.buildGraphFromAdjacencyList(options.adjacencyList);
@@ -178,23 +178,28 @@ import styles from './applicationModelComponent.scss'
             setLabels: true,
             ranker: 'network-simplex',
             rankDir: 'LR',
-            align: 'DR',
-            rankSep: 50,
+            align: '',
+            rankSep: 100,
             edgeSep: 50,
-            nodeSep: 50
+            nodeSep: 70
         }
     },
 
-    buildGraph: function (nodes, connections) {
+    buildGraph: function (nodes, connections, centerNode) {
         var elements = []
         var links = []
-
+        console.log('center', centerNode)
         if (nodes) {
             $.each(nodes, function (index, node) {
                 var shape = new Shape({ id: node.Id })
-                if (node.Id === 1) {
+                console.log('node', node)
+                if (node.Id === centerNode) {
                     shape.position(0, 0)
-                    // shape.resize(100, 30);
+                    shape.resize(200, 100)
+                    // shape.prop('fillColor', ['yellow'])
+                    shape.attrs = {rect: {'fill': 'red'}}
+                    // shape.attr({'fill': 'yellow'})
+                    console.log('fill color')
                 }
 
                 if (node.Id === 3) {
@@ -324,14 +329,15 @@ class ApplicationModelComponent extends React.Component {
                             el: ReactDOM.findDOMNode(that.refs.placeholder),
                             gridSize: 1,
                             height: 300,
-                            width: 400,
+                            width: 500,
                             interactive: function (cellView) {
                                 // linkMove: false
                                 // return cellView.model.isElement();
                             }
                         }),
                         nodes: nodeArray,
-                        connections: linkArray
+                        connections: linkArray,
+                        centerNode: nodeArray.length
                     }).on({
                         'layout': LinkControls.refresh
                     }, LinkControls)
