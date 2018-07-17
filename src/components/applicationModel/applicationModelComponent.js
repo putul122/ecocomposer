@@ -180,8 +180,8 @@ import styles from './applicationModelComponent.scss'
             rankDir: 'LR',
             align: '',
             rankSep: 100,
-            edgeSep: 50,
-            nodeSep: 70
+            edgeSep: 70,
+            nodeSep: 40
         }
     },
 
@@ -197,7 +197,7 @@ import styles from './applicationModelComponent.scss'
                     shape.position(0, 0)
                     shape.resize(200, 100)
                     // shape.prop('fillColor', ['yellow'])
-                    shape.attrs = {rect: {'fill': 'red'}}
+                    shape.attr({rect: {fill: 'yellow'}})
                     // shape.attr({'fill': 'yellow'})
                     console.log('fill color')
                 }
