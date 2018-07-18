@@ -66,8 +66,7 @@ export default function ApplicationDetail (props) {
         'ComponentTypeComponent': {
           'search': searchTextBox.value ? searchTextBox.value : '',
           'page_size': 10,
-          'page': currentPage - 1,
-          'recommended': searchTextBox.value === ''
+          'page': currentPage - 1
         }
       }
       props.fetchComponentComponent(payload)
@@ -85,8 +84,7 @@ export default function ApplicationDetail (props) {
       'ComponentTypeComponent': {
         'search': searchTextBox.value ? searchTextBox.value : '',
         'page_size': 10,
-        'page': currentPage + 1,
-        'recommended': searchTextBox.value === ''
+        'page': currentPage + 1
       }
     }
     props.fetchComponentComponent(payload)
@@ -101,7 +99,7 @@ export default function ApplicationDetail (props) {
         'search': searchTextBox.value ? searchTextBox.value : '',
         'page_size': 10,
         'page': currentPage,
-        'recommended': searchTextBox.value === ''
+        'recommended': false
       }
     }
     if (searchTextBox.value.length > 0) {
@@ -121,12 +119,12 @@ export default function ApplicationDetail (props) {
         </div>
       </div>
       <div className='row clearfix'>
-        <div className='col-sm-12 col-md-3'>
+        <div className='col-sm-12 col-md-4'>
           <div className='row'>
             <div className='col-sm-6 col-md-4'>
-              <h6>{ ComponentName }</h6>
+              <h4>{ ComponentName }</h4>
             </div>
-            <div className='col-sm-6 col-md-8 m--align-right'>
+            <div className='col-sm-6 col-md-7 m--align-right'>
               <div className='m-input-icon m-input-icon--left'>
                 <input type='text' className='form-control m-input' placeholder='Search...' id='generalSearch' ref={input => (searchTextBox = input)} onChange={handleInputChange} />
                 <span className='m-input-icon__icon m-input-icon__icon--left'>
@@ -136,13 +134,13 @@ export default function ApplicationDetail (props) {
                 </span>
               </div>
             </div>
-          </div>
+          </div><br />
           {/* <div className={styles.containersearch}>
             <span className={styles.icon}><i className='fa fa-search' /></span>
             <input type='search' id='search' placeholder='Search...' className={styles.round} ref={input => (searchTextBox = input)} onChange={handleInputChange} />
           </div> */}
-          <div className='row col-sm-12 col-md-12'>
-            <table className='datatable' >
+          <div className='col-sm-12 col-md-12'>
+            <table className='table table-striped- table-bordered table-hover table-checkable dataTable no-footer dtr-inline' >
               <thead>
                 <tr>
                   <th>Name</th>
@@ -154,15 +152,15 @@ export default function ApplicationDetail (props) {
               </tbody>
             </table>
           </div>
-          <div className='row col-sm-12 col-md-12'>
+          <div className='row col-sm-12 col-md-12 m--align-center'>
             <div className=''>
-              <div className=''>
+              <div className={styles.pagination}>
                 <a href='' className={previousClass} onClick={handlePrevious}>Previous</a> Page {currentPage} of {totalNoPages} <a href='' className={nextClass} onClick={handleNext}>Next</a>
               </div>
             </div>
           </div>
         </div>
-        <div className='col-sm-9 col-md-9'>
+        <div className='col-sm-8 col-md-8'>
           <h4>{ ComponentName } Model Usage Summary</h4>
           {/* <div id='m_table_1_filter' className='dataTables_filter'><label>Search:<input type='search' className='form-control form-control-sm' placeholder='' aria-controls='m_table_1'></label></div> */}
           <div className='row'>

@@ -2,6 +2,7 @@ import React from 'react'
 import styles from './applicationActivityComponent.scss'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
+import ReactHtmlParser from 'react-html-parser'
 
 export default function ApplicationActivity (props) {
   let activityMessages = props.activityMessages
@@ -11,22 +12,16 @@ export default function ApplicationActivity (props) {
   let activityMessagesList
   if (activityMessages !== '') {
     activityMessagesList = activityMessages.map(function (activityMessage, index) {
-      let mentionNames = activityMessage.resource.mentions.map(function (mention) {
-        return ' @' + mention
-      })
-      let referenceNames = activityMessage.resource.references.map(function (reference) {
-        return ' @' + reference
-      })
       let userIconlink = activityMessage._links.find(function (link) { return link.rel === 'user_icon_id' })
-      // return (
-      //   <li><img src={userIconlink.href} alt={activityMessage.resource.user} /><a href=''>{mentionNames.toString()}</a>{activityMessage.resource.name}<a href=''>{referenceNames.toString()}</a></li>
-      // )
+      let contextIconlink = activityMessage._links.find(function (link) { return link.rel === 'context_icon_id' })
+      console.log(contextIconlink)
+      let message = activityMessage.resource.name.replace(/reference/g, 'a').replace(/mention/g, 'a').replace(/ix=0/g, 'href=\'\'').replace(/ix=1/g, 'href=\'\'')
       return (
         <li>
           <div >
             <ul className={styles.groupspace}>
-              <img src={activityMessage ? activityMessage._links[1].href : ''} alt={activityMessage ? activityMessage.resource.context : ''} /><a href=''>{activityMessage ? activityMessage.resource.context : ''}</a>::<a href=''>{activityMessage ? activityMessage.resource.discussion : ''}</a>
-              <li><img src={userIconlink.href} alt={activityMessage.resource.user} /><a href=''>{mentionNames.toString()}</a>{activityMessage.resource.name}<a href=''>{referenceNames.toString()}</a></li>
+              <img src={activityMessage ? contextIconlink.href : ''} alt={activityMessage ? activityMessage.resource.context : ''} /><div className={styles.tooltip}><a href=''>{activityMessage.resource.context}</a><span className={styles.tooltiptext}>{activityMessage.resource.description}</span></div>::<a href=''>{activityMessage ? activityMessage.resource.discussion : ''}</a>
+              <li><img src={userIconlink.href} alt={activityMessage.resource.user} />{ReactHtmlParser(message)}</li>
             </ul>
           </div>
         </li>
