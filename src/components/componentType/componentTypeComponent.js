@@ -15,7 +15,6 @@ export default function ComponentType (props) {
     let previousClass = ''
     let totalComponentType
 
-    // console.log('com types', componentTypes)
     if (typeof componentTypes !== 'undefined') {
       componentTypesList = componentTypes.map(function (componentType, index) {
         let iconlink = componentType._links.find(function (link) { return link.rel === 'icon_id' })
@@ -91,13 +90,15 @@ export default function ComponentType (props) {
         <div className='col-md-4'>
           <h2> Components</h2>
         </div>
-        <div className={styles.searchdetail + ' col-md-8'}>
-          <div className={styles.containersearch}>
-            <span className={styles.icon}><i className='fa fa-search' /></span>
-            <input type='search' id='search' placeholder='Search...' className={styles.round} ref={input => (searchTextBox = input)} onChange={handleInputChange} />
+        <div className={' col-md-6'}>
+          <div className='m-input-icon m-input-icon--left'>
+            <input type='text' className='form-control m-input' placeholder='Search...' id='generalSearch' ref={input => (searchTextBox = input)} onChange={handleInputChange} />
+            <span className='m-input-icon__icon m-input-icon__icon--left'>
+              <span>
+                <i className='la la-search' />
+              </span>
+            </span>
           </div>
-          {/* <input type='search' placeholder='Search..' ref={input => (searchTextBox = input)} onChange={handleInputChange} /> */}
-          <button type='submit' onClick={handleInputChange} ><i className='fa fa-search' /></button><br />
         </div>
       </div>
       {props.isComponentTypeLoading && (
