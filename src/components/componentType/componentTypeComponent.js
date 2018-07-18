@@ -14,7 +14,6 @@ export default function ComponentType (props) {
     let nextClass = ''
     let previousClass = ''
     let totalComponentType
-    console.log('--------props----------', props)
 
     // console.log('com types', componentTypes)
     if (typeof componentTypes !== 'undefined') {
@@ -44,7 +43,8 @@ export default function ComponentType (props) {
       let payload = {
         'search': searchTextBox.value ? searchTextBox.value : '',
         'page_size': 10,
-        'page': currentPage
+        'page': currentPage,
+        'recommended': searchTextBox.value === ''
       }
       if (searchTextBox.value.length >= 0) {
         props.searchComponent(payload)
@@ -60,7 +60,8 @@ export default function ComponentType (props) {
         let payload = {
           'search': searchTextBox.value ? searchTextBox.value : '',
           'page_size': 10,
-          'page': currentPage - 1
+          'page': currentPage - 1,
+          'recommended': searchTextBox.value === ''
         }
         props.fetchComponent(payload)
         props.setCurrentPage(currentPage - 1)
@@ -76,7 +77,8 @@ export default function ComponentType (props) {
         let payload = {
           'search': searchTextBox.value ? searchTextBox.value : '',
           'page_size': 10,
-          'page': currentPage + 1
+          'page': currentPage + 1,
+          'recommended': searchTextBox.value === ''
         }
         props.fetchComponent(payload)
         props.setCurrentPage(currentPage + 1)

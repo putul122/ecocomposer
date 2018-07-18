@@ -5,7 +5,7 @@ import { actions as sagaActions } from '../../redux/sagas/'
 // Global State
 export function mapStateToProps (state, props) {
   return {
-    isLoggedin: state.basicReducer.isLoggedin
+    isLoggedin: state.registerReducer.isLoggedin
   }
 }
 // In Object form, each funciton is automatically wrapped in a dispatch

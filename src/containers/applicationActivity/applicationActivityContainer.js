@@ -4,10 +4,11 @@ import ApplicationActivity from '../../components/applicationActivity/applicatio
 import { actions as sagaActions } from '../../redux/sagas/'
 // Global State
 export function mapStateToProps (state, props) {
+  console.log('activity feed', state)
   return {
-    isLoggedin: state.basicReducer.isLoggedin,
-    activityMessages: state.basicReducer.activityMessages,
-    selectedComponentType: state.basicReducer.selectedComponentType
+    isLoggedin: state.registerReducer.isLoggedin,
+    activityMessages: state.applicationActivityReducer.activityMessages,
+    selectedComponentType: state.applicationDetailReducer.selectedComponentType
   }
 }
 // In Object form, each funciton is automatically wrapped in a dispatch
@@ -34,6 +35,8 @@ export default compose(
     // //   this.props.activityMessage(payload)
     // },
     componentWillReceiveProps: function (nextProps) {
+      console.log('component will receive props', nextProps)
+      console.log('this props', this)
       if (nextProps.selectedComponentType && (nextProps.selectedComponentType !== this.props.selectedComponentType)) {
         let payload = {
          'componentTypeId': nextProps.selectedComponentType

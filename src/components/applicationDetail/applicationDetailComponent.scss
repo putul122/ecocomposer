@@ -11,10 +11,14 @@ margin-bottom: 20px;
     font-size: 20px;
     margin-top: 10px;
     margin-right: 20px;
+    float: left;
 }
 .borderline{
 background:#ffffff;
 padding: 25px;
+}
+.borderline p{
+    margin-left: 40px;
 }
 .searchdetail{
     display: inline-flex;
@@ -42,7 +46,9 @@ padding: 25px;
     /* text-align: center; */
     margin-left: 15px;
   } 
-
+ .pagination{
+     margin-left: 150px;
+ }
   a.disabled {
     /* Make the disabled links grayish*/
     color: gray;

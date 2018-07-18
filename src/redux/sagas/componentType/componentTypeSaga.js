@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { takeLatest, call, put } from 'redux-saga/effects'
 import { createAction } from 'redux-actions'
+import api from '../../../constants'
 
 axios.defaults.headers.common['Accept'] = 'application/json'
 // axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
@@ -31,9 +32,12 @@ export default function * watchComponentType () {
 
 export function * getComponents (action) {
   try {
+    console.log('ct ---- action', action)
     const componentTypes = yield call(
       axios.get,
-      'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types?search=' + action.payload.search + '&page=' + action.payload.page + '&page_size=' + action.payload.page_size + '&recommended=true'
+      api.getComponentTypes,
+      {params: action.payload}
+      // 'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types?search=' + action.payload.search + '&page=' + action.payload.page + '&page_size=' + action.payload.page_size + '&recommended=true'
     )
     yield put(actionCreators.fetchComponentSuccess(componentTypes.data))
   } catch (error) {
@@ -45,7 +49,9 @@ export function * searchComponents (action) {
   try {
     const componentTypes = yield call(
       axios.get,
-      'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types?search=' + action.payload.search + '&page=' + action.payload.page + '&page_size=' + action.payload.page_size
+      api.getComponentTypes,
+      {params: action.payload}
+      // 'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types?search=' + action.payload.search + '&page=' + action.payload.page + '&page_size=' + action.payload.page_size
     )
     yield put(actionCreators.searchComponentSuccess(componentTypes.data))
   } catch (error) {

@@ -1,16 +1,14 @@
 import { createAction, handleActions } from 'redux-actions'
-import { FETCH_CREATE_USER_SUCCESS } from '../../sagas/register/registerSaga'
 import { FETCH_REGISTER_PROCESS_SUCCESS } from '../../sagas/registerProcess/registerProcessSaga'
 // Name Spaced Action Types
-const ACCOUNT_CREATION = 'BasicReducer/ACCOUNT_CREATION'
-const ABACUS_FILE_PROVISIONED = 'BasicReducer/ABACUS_FILE_PROVISIONED'
-const COMPOSER_MODEL_CONNECTED = 'BasicReducer/COMPOSER_MODEL_CONNECTED'
+const ACCOUNT_CREATION = 'RegisterProcessReducer/ACCOUNT_CREATION'
+const ABACUS_FILE_PROVISIONED = 'RegisterProcessReducer/ABACUS_FILE_PROVISIONED'
+const COMPOSER_MODEL_CONNECTED = 'RegisterProcessReducer/COMPOSER_MODEL_CONNECTED'
 
 export const actions = {
   ACCOUNT_CREATION,
   ABACUS_FILE_PROVISIONED,
   COMPOSER_MODEL_CONNECTED,
-  FETCH_CREATE_USER_SUCCESS,
   FETCH_REGISTER_PROCESS_SUCCESS
 }
 
@@ -24,10 +22,7 @@ export const initialState = {
   isAccountCreated: false,
   isAbacusFileProvisioned: false,
   isComposerModelConnected: false,
-  registerProcessStatus: '',
-  createAccountApi: '', // Currntly not used, will be using if we are getting this api from another api call
-  token: '',
-  registerProcessApi: '' // Currntly not used, will be using if we are getting this api from another api call
+  registerProcessStatus: ''
 }
 
 export default handleActions(
@@ -43,10 +38,6 @@ export default handleActions(
     [COMPOSER_MODEL_CONNECTED]: (state, action) => ({
       ...state,
       isComposerModelConnected: action.payload
-    }),
-    [FETCH_CREATE_USER_SUCCESS]: (state, action) => ({
-      ...state,
-      createAccountApi: action.payload
     }),
     [FETCH_REGISTER_PROCESS_SUCCESS]: (state, action) => ({
       ...state,

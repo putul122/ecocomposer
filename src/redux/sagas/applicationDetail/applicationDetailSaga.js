@@ -1,8 +1,7 @@
 import axios from 'axios'
 import { takeLatest, call, put } from 'redux-saga/effects'
 import { createAction } from 'redux-actions'
-
-axios.defaults.headers.common['Accept'] = 'application/json'
+import api from '../../../constants'
 
 // Saga action strings
 export const FETCH_COMPONENT_BY_ID = 'saga/componentType/FETCH_COMPONENT_BY_ID'
@@ -46,7 +45,8 @@ export function * getComponentById (action) {
   try {
     const componentDetails = yield call(
       axios.get,
-      'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types/' + action.payload.id
+      api.getComponentById(action.payload.id)
+      // 'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types/' + action.payload.id
     )
     yield put(actionCreators.fetchComponentByIdSuccess(componentDetails.data.data))
   } catch (error) {
@@ -58,7 +58,8 @@ export function * getComponentConstraint (action) {
     try {
       const componentConstraints = yield call(
         axios.get,
-        'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types/' + action.payload.id + '/constraints'
+        api.getComponentConstraint(action.payload.id)
+        // 'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types/' + action.payload.id + '/constraints'
       )
       yield put(actionCreators.fetchComponentConstraintSuccess(componentConstraints.data.data))
     } catch (error) {
@@ -70,7 +71,9 @@ export function * getComponentComponent (action) {
     try {
       const componentComponents = yield call(
         axios.get,
-        'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types/' + action.payload.id + '/components?search=' + action.payload.ComponentTypeComponent.search + '&page_size=' + action.payload.ComponentTypeComponent.page_size + '&page=' + action.payload.ComponentTypeComponent.page + '&recommended=true'
+        api.getComponentComponent(action.payload.id),
+        {params: action.payload.ComponentTypeComponent}
+        // 'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types/' + action.payload.id + '/components?search=' + action.payload.ComponentTypeComponent.search + '&page_size=' + action.payload.ComponentTypeComponent.page_size + '&page=' + action.payload.ComponentTypeComponent.page + '&recommended=true'
       )
       yield put(actionCreators.fetchComponentComponentSuccess(componentComponents.data))
     } catch (error) {
@@ -82,7 +85,9 @@ export function * searchComponentComponent (action) {
   try {
     const componentComponents = yield call(
       axios.get,
-      'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types/' + action.payload.id + '/components?search=' + action.payload.ComponentTypeComponent.search + '&page_size=' + action.payload.ComponentTypeComponent.page_size + '&page=' + action.payload.ComponentTypeComponent.page + '&recommended=false'
+      api.getComponentComponent(action.payload.id),
+      {params: action.payload.ComponentTypeComponent}
+      // 'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types/' + action.payload.id + '/components?search=' + action.payload.ComponentTypeComponent.search + '&page_size=' + action.payload.ComponentTypeComponent.page_size + '&page=' + action.payload.ComponentTypeComponent.page + '&recommended=false'
     )
     console.log('Component Components search action', action.payload)
     yield put(actionCreators.searchComponentComponentSuccess(componentComponents.data))

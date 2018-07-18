@@ -2,17 +2,17 @@ import { connect } from 'react-redux'
 import { compose, lifecycle } from 'recompose'
 import ComponentType from '../../components/componentType/componentTypeComponent'
 import { actions as sagaActions } from '../../redux/sagas/'
-import { actionCreators } from '../../redux/reducers/basicReducer/basicReducerReducer'
-
+import { actionCreators as componentTypeActioncreators } from '../../redux/reducers/componentTypeReducer/componentTypeReducerReducer'
+import { actionCreators as basicActionCreators } from '../../redux/reducers/basicReducer/basicReducerReducer'
 // Global State
 export function mapStateToProps (state, props) {
   console.log('container props', props)
-  console.log('container state', state)
+  console.log('component container state', state)
   return {
-    componentTypes: state.basicReducer.componentTypes,
-    searchComponentType: state.basicReducer.searchComponentType,
-    isComponentTypeLoading: state.basicReducer.isComponentTypeLoading,
-    currentPage: state.basicReducer.currentPage
+    componentTypes: state.componentTypeReducer.componentTypes,
+    // searchComponentType: state.componentTypeReducer.searchComponentType,
+    isComponentTypeLoading: state.componentTypeReducer.isComponentTypeLoading,
+    currentPage: state.componentTypeReducer.currentPage
   }
 }
 
@@ -20,9 +20,10 @@ export function mapStateToProps (state, props) {
 export const propsMapping: Callbacks = {
   fetchComponent: sagaActions.componentTypeActions.fetchComponent,
   searchComponent: sagaActions.componentTypeActions.searchComponent,
-  setSearchComponentType: actionCreators.setSearchComponentType,
-  setComponentTypeLoading: actionCreators.setComponentTypeLoading,
-  setCurrentPage: actionCreators.setCurrentPage
+  // setSearchComponentType: actionCreators.setSearchComponentType,
+  setComponentTypeLoading: componentTypeActioncreators.setComponentTypeLoading,
+  setCurrentPage: componentTypeActioncreators.setCurrentPage,
+  setBreadcrumb: basicActionCreators.setBreadcrumb
 }
 
 // If you want to use the function mapping
@@ -40,23 +41,38 @@ export default compose(
     let payload = {
       'search': '',
       'page_size': 10,
-      'page': 1
+      'page': 1,
+      'recommended': true
     }
     this.props.fetchComponent && this.props.fetchComponent(payload)
+    let breadcrumb = {
+      title: 'Components',
+      items: [
+        {
+          name: 'Home',
+          href: '/home',
+          separator: false
+        },
+        {
+          separator: true
+        },
+        {
+          name: 'Components',
+          href: '/components',
+          separator: false
+        }
+      ]
+    }
+    this.props.setBreadcrumb && this.props.setBreadcrumb(breadcrumb)
     },
     componentDidMount: function () {
     // Block
-      console.log('com did mount 1', this.props)
       this.props.setComponentTypeLoading && this.props.setComponentTypeLoading(false)
     },
     componentDidUpdate: function () {
     // Block
-    console.log('component did update')
     this.props.setComponentTypeLoading && this.props.setComponentTypeLoading(false)
     },
-    componentWillReceiveProps: function () {
-      console.log('component will  update')
-      // this.props.setComponentTypeLoading && this.props.setComponentTypeLoading(false)
-    }
+    componentWillReceiveProps: function () {}
   })
 )(ComponentType)

@@ -188,29 +188,18 @@ import styles from './applicationModelComponent.scss'
     buildGraph: function (nodes, connections, centerNode) {
         var elements = []
         var links = []
-        console.log('center', centerNode)
         if (nodes) {
             $.each(nodes, function (index, node) {
                 var shape = new Shape({ id: node.Id })
-                console.log('node', node)
                 if (node.Id === centerNode) {
                     shape.position(0, 0)
                     shape.resize(200, 100)
-                    // shape.prop('fillColor', ['yellow'])
                     shape.attr({rect: {fill: 'yellow'}})
-                    // shape.attr({'fill': 'yellow'})
-                    console.log('fill color')
                 }
-
-                if (node.Id === 3) {
-                    shape.prop('fillColor', ['blue'])
-                }
-
                 shape.setText(node.Name)
 
                 if (node.Title) { shape.setTitle(node.Title) }
-                // if (node.Attributes) { shape.setCSSClasses(node.Attributes); }
-                shape.setCSSClasses(node.Attributes)
+                if (node.Attributes) { shape.setCSSClasses(node.Attributes) }
                 elements.push(shape)
             })
         }

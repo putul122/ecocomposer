@@ -4,7 +4,6 @@ import { Provider } from 'react-redux'
 import createReduxStore from '../../redux/store'
 import Test from './testScene'
 
-
 const reduxStore = createReduxStore()
 
 const provider = (storyFn) => (

@@ -66,7 +66,8 @@ export default function ApplicationDetail (props) {
         'ComponentTypeComponent': {
           'search': searchTextBox.value ? searchTextBox.value : '',
           'page_size': 10,
-          'page': currentPage - 1
+          'page': currentPage - 1,
+          'recommended': searchTextBox.value === ''
         }
       }
       props.fetchComponentComponent(payload)
@@ -84,7 +85,8 @@ export default function ApplicationDetail (props) {
       'ComponentTypeComponent': {
         'search': searchTextBox.value ? searchTextBox.value : '',
         'page_size': 10,
-        'page': currentPage + 1
+        'page': currentPage + 1,
+        'recommended': searchTextBox.value === ''
       }
     }
     props.fetchComponentComponent(payload)
@@ -99,7 +101,7 @@ export default function ApplicationDetail (props) {
         'search': searchTextBox.value ? searchTextBox.value : '',
         'page_size': 10,
         'page': currentPage,
-        'recommended': false
+        'recommended': searchTextBox.value === ''
       }
     }
     if (searchTextBox.value.length > 0) {

@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { takeLatest, call, put } from 'redux-saga/effects'
 import { createAction } from 'redux-actions'
+import api from '../../../constants'
 
 axios.defaults.headers.common['Accept'] = 'application/json'
 
@@ -23,7 +24,7 @@ export function * getRegisterProcess (action) {
   try {
     const registerProcess = yield call(
       axios.get,
-      'https://virtserver.swaggerhub.com/JakoMenkveld/ecocomposer-notification/1/processes/ '
+      api.registerProcess
     )
     yield put(actionCreators.fetchRegisterProcessSuccess(registerProcess.data[0].status))
   } catch (error) {

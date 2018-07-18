@@ -2,15 +2,15 @@ import { connect } from 'react-redux'
 import { compose, lifecycle } from 'recompose'
 import RegisterProcess from '../../components/registerProcess/registerProcessComponent'
 import { actions as sagaActions } from '../../redux/sagas/'
-import { actionCreators } from '../../redux/reducers/basicReducer/basicReducerReducer'
+import { actionCreators } from '../../redux/reducers/registerProcessReducer/registerProcessReducerReducer'
 
 // Global State
 export function mapStateToProps (state, props) {
   return {
-    isAccountCreated: state.basicReducer.isAccountCreated,
-    isAbacusFileProvisioned: state.basicReducer.isAbacusFileProvisioned,
-    isComposerModelConnected: state.basicReducer.isComposerModelConnected,
-    registerProcessStatus: state.basicReducer.registerProcessStatus
+    isAccountCreated: state.registerProcessReducer.isAccountCreated,
+    isAbacusFileProvisioned: state.registerProcessReducer.isAbacusFileProvisioned,
+    isComposerModelConnected: state.registerProcessReducer.isComposerModelConnected,
+    registerProcessStatus: state.registerProcessReducer.registerProcessStatus
   }
 }
 

@@ -5,6 +5,7 @@ import _ from 'lodash'
 
 export default function ApplicationActivity (props) {
   let activityMessages = props.activityMessages
+  console.log('activityMessages -----', activityMessages)
   var grouped = _.mapValues(_.groupBy(activityMessages, 'context'), messageList => messageList.map(message => message))
   console.log('grouped', grouped)
   let activityMessagesList

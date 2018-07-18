@@ -1,15 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styles from './registerComponent.scss'
-// import { withRouter } from 'react-router-dom'
-// const Button = withRouter(({ history }) => (
-//   <button
-//     type='button' id='m_blockui_1_4'
-//     onClick={() => { history.push('/registering') }}
-//     className={styles.buttonbg + 'btn btn-primary btn-lg btn-block pb_btn-pill '}>
-//     Test Drive
-//   </button>
-// ))
 
 export default function Register (props) {
   let FullNameBox
@@ -17,15 +8,19 @@ export default function Register (props) {
   let PasswordBox
   let handleInput = function (event) {
     if (typeof (FullNameBox) !== 'undefined' && typeof (EmailBox) !== 'undefined' && typeof (PasswordBox) !== 'undefined') {
-      console.log('my full' + FullNameBox.value)
-      // let name = FullNameBox.value
-      // window.fcWidget.setExternalId(name + Math.random())
-      // window.fcWidget.user.setFirstName(name)
-      // window.fcWidget.user.setEmail(EmailBox.value)
-      // window.fcWidget.user.setProperties({
-      //   plan: 'Estate',                 // meta property 1
-      //   status: 'Active'                // meta property 2
-      // })
+      let name = FullNameBox.value
+      // name.split(' ', 2)[0] + Math.random()
+      // To set unique user id in your system when it is available
+      window.fcWidget.setExternalId(EmailBox.value)
+      // To set user name
+      window.fcWidget.user.setFirstName(name)
+      // To set user email
+      window.fcWidget.user.setEmail(EmailBox.value)
+      // To set user properties
+      window.fcWidget.user.setProperties({
+        plan: 'Estate',                 // meta property 1
+        status: 'Active'                // meta property 2
+      })
       let payload = {
         'email': EmailBox.value,
         'password': PasswordBox.value

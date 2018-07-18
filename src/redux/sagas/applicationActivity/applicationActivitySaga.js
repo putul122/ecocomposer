@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { takeLatest, call, put } from 'redux-saga/effects'
 import { createAction } from 'redux-actions'
+import api from '../../../constants'
 
 // Saga action strings
 export const ACTIVITY_MESSAGE = 'saga/Register/ACTIVITY_MESSAGE'
@@ -21,7 +22,8 @@ export function * activityMessage (action) {
   try {
     const activityMessage = yield call(
       axios.get,
-      'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types/' + action.payload.componentTypeId + '/messages?page_size=5&page=1&recommended=false'
+      api.getActivityMessage(action.payload.componentTypeId)
+      // 'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types/' + action.payload.componentTypeId + '/messages?page_size=5&page=1&recommended=false'
     )
     yield put(actionCreators.activityMessageSuccess(activityMessage.data.data))
   } catch (error) {
