@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 
 export default function Breadcrumb (props) {
   console.log('Bread crumb', props)
@@ -17,9 +17,9 @@ export default function Breadcrumb (props) {
         } else {
           return (
             <li key={index} className='m-nav__item'>
-              <Link to={object.href} className='m-nav__link'>
+              <a href={object.href} className='m-nav__link'>
                 <span className='m-nav__link-text'>{object.name}</span>
-              </Link>
+              </a>
             </li>
           )
         }

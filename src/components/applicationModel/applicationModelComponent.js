@@ -6,7 +6,7 @@ import $ from 'jquery/dist/jquery'
 import * as d3 from 'd3'
 // import './applicationModelComponent.scss'
 
-let colors = d3.scaleOrdinal(d3.schemeCategory10)
+// let colors = d3.scaleOrdinal(d3.schemeCategory10)
 let width = 1200
 let height = 2500
 // let nodeWidth = 100
@@ -170,8 +170,8 @@ function force (graphData) {
       })
       .attr('stroke-opacity', '0.3')
       .attr('stroke', '#000')
-      // .attr("fill", "steelblue")
-      .style('fill', function (d, i) { return colors(i) })
+      .attr('fill', 'steelblue')
+      // .style('fill', function (d, i) { return colors(i) })
 
     nodeEnter.append('title')
       .text(function (d) { return d.title })
@@ -581,7 +581,7 @@ class ApplicationModelComponent extends React.Component {
     render () {
         // className={'margin-top: -390px'}
       return (
-        <div id='mainScreen' >
+        <div id='mainScreen' style={{'margin-top': '-440px', 'margin-left': '-50px'}} >
           <svg id='diagramLayout' />
         </div>
       )

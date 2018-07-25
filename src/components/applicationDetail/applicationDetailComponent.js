@@ -24,6 +24,8 @@ export default function ApplicationDetail (props) {
   let nextClass = ''
   let previousClass = ''
   let totalComponentTypeComponent
+  let pageArray = []
+  // let paginationList
 
   if (props.componentDetail !== '') {
     ComponentName = props.componentDetail.resource.name
@@ -32,15 +34,11 @@ export default function ApplicationDetail (props) {
   if (typeof componentComponents !== 'undefined') {
     componentComponentsList = componentComponents.map(function (componentComponent, index) {
       return (
-        <tr role='row' className='odd' key={index} >
-          <td className='sorting_1' >
-            <div className='m-card-user m-card-user--sm'>
-              <div className='m-card-user__details'>
-                <span className='m-card-user__name'><Link to={'/' + componentComponent.resource.id}>{ componentComponent.resource.name }</Link></span>
-              </div>
-            </div>
+        <tr className='m-datatable__row m-datatable__row--even' key={index} style={{ 'left': '0px' }} >
+          <td className='m-datatable__cell--sorted m-datatable__cell' >
+            <span style={{ 'width': '150px', 'text-align': 'center' }}><Link to={'/' + componentComponent.resource.id}>{ componentComponent.resource.name }</Link></span>
           </td>
-          <td><p>{ componentComponent.resource.description }</p></td>
+          <td className='m-datatable__cell--sorted m-datatable__cell'><p>{ componentComponent.resource.description }</p></td>
         </tr>
       )
     })
@@ -49,18 +47,39 @@ export default function ApplicationDetail (props) {
     totalNoPages = Math.ceil(totalComponentTypeComponent / perPage)
 
     if (currentPage === 1) {
-      previousClass = styles.disabled
+      previousClass = 'm-datatable__pager-link--disabled'
     }
 
     if (currentPage === totalNoPages) {
-      nextClass = styles.disabled
+      nextClass = 'm-datatable__pager-link--disabled'
     }
+
+    let i = 1
+    while (i <= totalNoPages) {
+      let pageParameter = {}
+      pageParameter.number = i
+      pageParameter.class = ''
+      pageArray.push(pageParameter)
+      i++
+    }
+  //   paginationList = pageArray.map(function (page, index) {
+  //     if (page.number === currentPage) {
+  //       page.class = 'm-datatable__pager-link--active'
+  //     } else {
+  //       page.class = ''
+  //     }
+  //     return (<li key={index} >
+  //       <a href='javascript:void(0)' className={'m-datatable__pager-link m-datatable__pager-link-number ' + page.class} data-page={page.number} title={page.number} onClick={handlePage} >{page.number}</a>
+  //     </li>)
+  //   })
+  //   console.log('------------', pageArray)
+  //   console.log('------------ cur', currentPage)
   }
 
   let handlePrevious = function (event) {
     event.preventDefault()
     if (currentPage === 1) {
-      previousClass = styles.disabled
+      previousClass = 'm-datatable__pager-link--disabled'
     } else {
       let payload = {
         'id': props.componentDetail.resource.id,
@@ -78,7 +97,7 @@ export default function ApplicationDetail (props) {
   let handleNext = function (event) {
     event.preventDefault()
     if (currentPage === totalNoPages) {
-      nextClass = styles.disabled
+      nextClass = 'm-datatable__pager-link--disabled'
     } else {
       let payload = {
       'id': props.componentDetail.resource.id,
@@ -93,6 +112,25 @@ export default function ApplicationDetail (props) {
     }
   }
 
+  let handlePage = function (page) {
+    console.log('cur page', page)
+    if (page === 1) {
+      previousClass = 'm-datatable__pager-link--disabled'
+    } else if (page === totalNoPages) {
+      nextClass = 'm-datatable__pager-link--disabled'
+    }
+    let payload = {
+      'id': props.componentDetail.resource.id,
+      'ComponentTypeComponent': {
+        'search': searchTextBox.value ? searchTextBox.value : '',
+        'page_size': 10,
+        'page': page
+      }
+    }
+    props.fetchComponentComponent(payload)
+    props.setCurrentPage(page)
+  }
+
   let handleInputChange = function (event) {
     let payload = {
       'id': props.componentDetail.resource.id,
@@ -100,15 +138,16 @@ export default function ApplicationDetail (props) {
         'search': searchTextBox.value ? searchTextBox.value : '',
         'page_size': 10,
         'page': currentPage,
-        'recommended': false
+        'recommended': searchTextBox.value === ''
       }
     }
-    if (searchTextBox.value.length > 0) {
+    // if (searchTextBox.value.length > 0) {
       // if (searchTextBox.value.length % 2 === 0) {
+        // props.fetchComponentComponent(payload)
         props.searchComponentComponent(payload)
         // props.setComponentTypeLoading(true)
       // }
-    }
+    // }
   }
   return (
     <div className={styles.borderline}>
@@ -140,32 +179,57 @@ export default function ApplicationDetail (props) {
             <span className={styles.icon}><i className='fa fa-search' /></span>
             <input type='search' id='search' placeholder='Search...' className={styles.round} ref={input => (searchTextBox = input)} onChange={handleInputChange} />
           </div> */}
-          <div className='col-sm-12 col-md-12 dataTables_wrapper'>
-            <div className='dataTables_scroll'>
-              <div className='dataTables_scrollBody'>
-                <div className={styles.scrollbody}>
-                  <table className='table table-striped- table-bordered table-hover table-checkable dataTable no-footer id="m_table_1" role="grid"  dtr-inline' >
-                    <thead>
-                      <tr role='row'>
-                        <th>Name</th>
-                        <th>Description</th>
-                      </tr>
-                    </thead>
-                    <tbody>
+          <div className='col-sm-12 col-md-12'>
+            <div className='m_datatable' id='scrolling_vertical'>
+              <div className='m_datatable m-datatable m-datatable--default m-datatable--loaded m-datatable--scroll' id='scrolling_vertical' style={{}}>
+                <table className='m-datatable__table' style={{ 'display': 'block', 'min-height': '300px', 'max-height': '550px' }} >
+                  <thead className='m-datatable__head'>
+                    <tr className='m-datatable__row' style={{ 'left': '0px;' }}>
+                      {/* <th data-field='RecordID' className='m-datatable__cell m-datatable__cell--check'>
+                        <span style={{width: 40}}><label htmlFor='m-checkbox m-checkbox--single m-checkbox--all m-checkbox--solid m-checkbox--brand'>
+                          <input type='checkbox' /><span /></label></span></th> */}
+                      <th className='m-datatable__cell m-datatable__cell--sort' style={{ 'text-align': 'center' }}>Name</th>
+                      <th className='m-datatable__cell m-datatable__cell--sort' style={{ 'text-align': 'center' }}>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody style={{ 'max-height': '495px' }} className='m-datatable__body ps ps--active-y ps--scrolling-y'>
+                    <div className={styles.scrollbar} id='style-1'>
                       { componentComponentsList }
-                    </tbody>
-                  </table>
+                    </div>
+                    {/* <div className='ps__rail-x' >
+                      <div className='ps__thumb-x' style={{ 'left': '0px', 'width': '0px' }} />
+                    </div>
+                    <div className='ps__rail-y' style={{'top': '0px', 'height': '495px', 'right': '0'}}><div className='ps__thumb-y' style={{ 'top': '0px', 'height': '216px' }} /></div> */}
+                  </tbody>
+                </table>
+                <div className='m-datatable__pager m-datatable--paging-loaded clearfix' style={{ 'text-align': 'center' }}>
+                  <ul className='m-datatable__pager-nav'>
+                    {/* <li><a href='' title='First' className='m-datatable__pager-link m-datatable__pager-link--first' data-page={1}><i className='la la-angle-double-left' /></a></li> */}
+                    <li><a href='' title='Previous' className={'m-datatable__pager-link m-datatable__pager-link--prev ' + previousClass} onClick={handlePrevious} data-page='4'><i className='la la-angle-left' /></a></li>
+                    {pageArray && pageArray.map(function (page, index) {
+                          if (page.number === currentPage) {
+                            page.class = 'm-datatable__pager-link--active'
+                          } else {
+                            page.class = ''
+                          }
+                          return (<li key={index} >
+                            <a href='' className={'m-datatable__pager-link m-datatable__pager-link-number ' + page.class} data-page={page.number} title={page.number} onClick={(event) => { event.preventDefault(); handlePage(page.number) }} >{page.number}</a>
+                          </li>)
+                        })}
+                    <li><a href='' title='Next' className={'m-datatable__pager-link m-datatable__pager-link--next ' + nextClass} onClick={handleNext} data-page='4'><i className='la la-angle-right' /></a></li>
+                    {/* <li><a href='' title='Last' className='m-datatable__pager-link m-datatable__pager-link--last' data-page={18}><i className='la la-angle-double-right' /></a></li> */}
+                  </ul>
                 </div>
               </div>
             </div>
           </div>
-          <div className='row col-sm-12 col-md-12 m--align-center'>
+          {/* <div className='row col-sm-12 col-md-12 m--align-center'>
             <div className=''>
               <div className={styles.pagination}>
                 <a href='' className={previousClass} onClick={handlePrevious}>Previous</a> Page {currentPage} of {totalNoPages} <a href='' className={nextClass} onClick={handleNext}>Next</a>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
         <div className='col-sm-8 col-md-8'>
           <h4>{ ComponentName } Model Usage Summary</h4>
@@ -177,10 +241,6 @@ export default function ApplicationDetail (props) {
           </div>
         </div>
       </div>
-      {/* <div className='m-portlet__body'>
-        <div id='m_table_1_wrapper' className='dataTables_wrapper container-fluid dt-bootstrap4 no-footer'>
-        </div>
-      </div> */}
     </div>
   )
 }
@@ -188,7 +248,7 @@ export default function ApplicationDetail (props) {
 ApplicationDetail.propTypes = {
   componentDetail: PropTypes.any,
   componentComponents: PropTypes.any,
-  searchComponentComponent: PropTypes.func,
+  // searchComponentComponent: PropTypes.func,
   currentPage: PropTypes.any
   // setCurrentPage: PropTypes.func,
   // fetchComponentComponent: PropTypes.func
