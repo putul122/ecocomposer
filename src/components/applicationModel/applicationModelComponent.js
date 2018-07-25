@@ -322,208 +322,85 @@ class ApplicationModelComponent extends React.Component {
     componentWillReceiveProps (nextProps) {
         console.log('component will receive props app model', nextProps)
         if (nextProps.componentConstraints !== this.props.componentConstraints) {
+            console.log('inside if -------------------------------', nextProps.componentConstraints)
             let nodeData = nextProps.componentConstraints
             let leftCordinates = []
             let rightCordinates = []
             let topCordinates = []
             let downCordinates = []
-            // let index = 0
-            var firstNodeSet = false
             var linkArray = []
             var nodeArray = []
             let node = {}
             let graphData = {}
+            // Setting first node
+            node.id = 0
+            node.name = nodeData[0].resource.component_type_name
+            node.Title = nodeData[0].resource.component_type_name
+            node.width = 100
+            node.height = 50
+            node.x = 400
+            node.y = 450
+            node.Attributes = ['']
+            nodeArray.push(node)
+            // end
 
             $.each(nodeData, function (index, data) {
-                // console.log('data', data)
-                if (!firstNodeSet) {
-                    index++
-                    node = {}
-                    node.id = index
-                    node.name = data.resource.component_type_name
-                    node.Title = data.resource.component_type_name
-                    node.width = 100
-                    node.height = 50
-                    node.x = 400
-                    node.y = 450
-                    node.Attributes = ['']
-                    nodeArray.push(node)
-                    firstNodeSet = true
-                } else {
-                    index++
-                    node = {}
-
-                    node.id = index
-                    node.name = data.resource.target_component_type_name
-                    node.Title = data.resource.target_component_type_name
-                    node.Attributes = ['']
-                    node.width = 100
-                    node.height = 50
-                    if (data.resource.constraint_type === 'Parent') {
-                        if (data.resource.name.toLowerCase() === 'can be parent of') {
-                            // set down target node
-                            let downLength = downCordinates.length
-                            if (downLength < 1) {
-                            let cor = {
-                                x: 200,
-                                y: 900
-                                }
-                            downCordinates.push(cor)
-                            node.x = cor.x
-                            node.y = cor.y
-                            } else {
-                                let prevCor = downCordinates[downLength - 1]
-                                if (typeof prevCor !== 'undefined') {
-                                    let cor = {
-                                        x: prevCor.x + 200,
-                                        y: 900
-                                        }
-                                    downCordinates.push(cor)
-                                    node.x = cor.x
-                                    node.y = cor.y
-                                }
+                index++
+                node = {}
+                node.id = index
+                node.name = data.resource.target_component_type_name
+                node.Title = data.resource.target_component_type_name
+                node.Attributes = ['']
+                node.width = 100
+                node.height = 50
+                if (data.resource.constraint_type === 'Parent') {
+                    if (data.resource.name.toLowerCase() === 'can be parent of') {
+                        // set down target node
+                        let downLength = downCordinates.length
+                        if (downLength < 1) {
+                        let cor = {
+                            x: 200,
+                            y: 900
                             }
-                        } else if (data.resource.name.toLowerCase() === 'can be child of') {
-                            // set top target node
-                            let topLength = topCordinates.length
-                            if (topLength < 1) {
-                            let cor = {
-                                x: 200,
-                                y: 10
-                                }
-                            topCordinates.push(cor)
-                            node.x = cor.x
-                            node.y = cor.y
-                            } else {
-                                let prevCor = topCordinates[topLength - 1]
-                                if (typeof prevCor !== 'undefined') {
-                                    let cor = {
-                                        x: prevCor.x + 200,
-                                        y: 10
-                                        }
-                                    topCordinates.push(cor)
-                                    node.x = cor.x
-                                    node.y = cor.y
-                                }
-                            }
+                        downCordinates.push(cor)
+                        node.x = cor.x
+                        node.y = cor.y
                         } else {
-                            let rightLength = rightCordinates.length
-                            if (rightLength < 1) {
-                                let cor = {
-                                    x: 800,
-                                    y: 300
-                                    }
-                                rightCordinates.push(cor)
-                                node.x = cor.x
-                                node.y = cor.y
-                            } else {
-                                let prevCor = rightCordinates[rightLength - 1]
-                                if (typeof prevCor !== 'undefined') {
-                                    let cor = {
-                                        x: 800,
-                                        y: prevCor.y + 100
-                                    }
-                                    rightCordinates.push(cor)
-                                    node.x = cor.x
-                                    node.y = cor.y
-                                }
-                            }
-                        }
-                    } else if (data.resource.constraint_type === 'Child') {  // down
-                        if (data.resource.name.toLowerCase() === 'can be parent of') {
-                            // set down target node
-                            let downLength = downCordinates.length
-                            if (downLength < 1) {
-                            let cor = {
-                                x: 200,
-                                y: 900
-                                }
-                            downCordinates.push(cor)
-                            node.x = cor.x
-                            node.y = cor.y
-                            } else {
-                                let prevCor = downCordinates[downLength - 1]
-                                if (typeof prevCor !== 'undefined') {
-                                    let cor = {
-                                        x: prevCor.x + 200,
-                                        y: 900
-                                        }
-                                    downCordinates.push(cor)
-                                    node.x = cor.x
-                                    node.y = cor.y
-                                }
-                            }
-                        } else if (data.resource.name.toLowerCase() === 'can be child of') {
-                            // set top target node
-                            let topLength = topCordinates.length
-                            if (topLength < 1) {
-                            let cor = {
-                                x: 200,
-                                y: 10
-                                }
-                            topCordinates.push(cor)
-                            node.x = cor.x
-                            node.y = cor.y
-                            } else {
-                                let prevCor = topCordinates[topLength - 1]
-                                if (typeof prevCor !== 'undefined') {
-                                    let cor = {
-                                        x: prevCor.x + 200,
-                                        y: 10
-                                        }
-                                    topCordinates.push(cor)
-                                    node.x = cor.x
-                                    node.y = cor.y
-                                }
-                            }
-                        } else {
-                            let rightLength = rightCordinates.length
-                            if (rightLength < 1) {
-                                let cor = {
-                                    x: 800,
-                                    y: 300
-                                    }
-                                rightCordinates.push(cor)
-                                node.x = cor.x
-                                node.y = cor.y
-                            } else {
-                                let prevCor = rightCordinates[rightLength - 1]
-                                if (typeof prevCor !== 'undefined') {
-                                    let cor = {
-                                        x: 800,
-                                        y: prevCor.y + 100
-                                    }
-                                    rightCordinates.push(cor)
-                                    node.x = cor.x
-                                    node.y = cor.y
-                                }
-                            }
-                        }
-                    } else if (data.resource.constraint_type === 'ConnectFrom') {  // Left
-                        // Left Side Cordinates
-                        let leftLength = leftCordinates.length
-                        if (leftLength < 1) {
-                            let cor = {
-                                x: 10,
-                                y: 300
-                                }
-                            leftCordinates.push(cor)
-                            node.x = cor.x
-                            node.y = cor.y
-                        } else {
-                            let prevCor = leftCordinates[leftLength - 1]
+                            let prevCor = downCordinates[downLength - 1]
                             if (typeof prevCor !== 'undefined') {
                                 let cor = {
-                                    x: 10,
-                                    y: prevCor.y + 100
+                                    x: prevCor.x + 200,
+                                    y: 900
                                     }
-                                leftCordinates.push(cor)
+                                downCordinates.push(cor)
                                 node.x = cor.x
                                 node.y = cor.y
                             }
                         }
-                    } else if (data.resource.constraint_type === 'ConnectTo') {  // Right
-                        // Right Side Cordinates
+                    } else if (data.resource.name.toLowerCase() === 'can be child of') {
+                        // set top target node
+                        let topLength = topCordinates.length
+                        if (topLength < 1) {
+                        let cor = {
+                            x: 200,
+                            y: 10
+                            }
+                        topCordinates.push(cor)
+                        node.x = cor.x
+                        node.y = cor.y
+                        } else {
+                            let prevCor = topCordinates[topLength - 1]
+                            if (typeof prevCor !== 'undefined') {
+                                let cor = {
+                                    x: prevCor.x + 200,
+                                    y: 10
+                                    }
+                                topCordinates.push(cor)
+                                node.x = cor.x
+                                node.y = cor.y
+                            }
+                        }
+                    } else {
                         let rightLength = rightCordinates.length
                         if (rightLength < 1) {
                             let cor = {
@@ -546,49 +423,165 @@ class ApplicationModelComponent extends React.Component {
                             }
                         }
                     }
+                } else if (data.resource.constraint_type === 'Child') {  // down
+                    if (data.resource.name.toLowerCase() === 'can be parent of') {
+                        // set down target node
+                        let downLength = downCordinates.length
+                        if (downLength < 1) {
+                        let cor = {
+                            x: 200,
+                            y: 900
+                            }
+                        downCordinates.push(cor)
+                        node.x = cor.x
+                        node.y = cor.y
+                        } else {
+                            let prevCor = downCordinates[downLength - 1]
+                            if (typeof prevCor !== 'undefined') {
+                                let cor = {
+                                    x: prevCor.x + 200,
+                                    y: 900
+                                    }
+                                downCordinates.push(cor)
+                                node.x = cor.x
+                                node.y = cor.y
+                            }
+                        }
+                    } else if (data.resource.name.toLowerCase() === 'can be child of') {
+                        // set top target node
+                        let topLength = topCordinates.length
+                        if (topLength < 1) {
+                        let cor = {
+                            x: 200,
+                            y: 10
+                            }
+                        topCordinates.push(cor)
+                        node.x = cor.x
+                        node.y = cor.y
+                        } else {
+                            let prevCor = topCordinates[topLength - 1]
+                            if (typeof prevCor !== 'undefined') {
+                                let cor = {
+                                    x: prevCor.x + 200,
+                                    y: 10
+                                    }
+                                topCordinates.push(cor)
+                                node.x = cor.x
+                                node.y = cor.y
+                            }
+                        }
+                    } else {
+                        let rightLength = rightCordinates.length
+                        if (rightLength < 1) {
+                            let cor = {
+                                x: 800,
+                                y: 300
+                                }
+                            rightCordinates.push(cor)
+                            node.x = cor.x
+                            node.y = cor.y
+                        } else {
+                            let prevCor = rightCordinates[rightLength - 1]
+                            if (typeof prevCor !== 'undefined') {
+                                let cor = {
+                                    x: 800,
+                                    y: prevCor.y + 100
+                                }
+                                rightCordinates.push(cor)
+                                node.x = cor.x
+                                node.y = cor.y
+                            }
+                        }
+                    }
+                } else if (data.resource.constraint_type === 'ConnectFrom') {  // Left
+                    // Left Side Cordinates
+                    let leftLength = leftCordinates.length
+                    if (leftLength < 1) {
+                        let cor = {
+                            x: 10,
+                            y: 300
+                            }
+                        leftCordinates.push(cor)
+                        node.x = cor.x
+                        node.y = cor.y
+                    } else {
+                        let prevCor = leftCordinates[leftLength - 1]
+                        if (typeof prevCor !== 'undefined') {
+                            let cor = {
+                                x: 10,
+                                y: prevCor.y + 100
+                                }
+                            leftCordinates.push(cor)
+                            node.x = cor.x
+                            node.y = cor.y
+                        }
+                    }
+                } else if (data.resource.constraint_type === 'ConnectTo') {  // Right
+                    // Right Side Cordinates
+                    let rightLength = rightCordinates.length
+                    if (rightLength < 1) {
+                        let cor = {
+                            x: 800,
+                            y: 300
+                            }
+                        rightCordinates.push(cor)
+                        node.x = cor.x
+                        node.y = cor.y
+                    } else {
+                        let prevCor = rightCordinates[rightLength - 1]
+                        if (typeof prevCor !== 'undefined') {
+                            let cor = {
+                                x: 800,
+                                y: prevCor.y + 100
+                            }
+                            rightCordinates.push(cor)
+                            node.x = cor.x
+                            node.y = cor.y
+                        }
+                    }
+                }
 
-                    nodeArray.push(node)
+                nodeArray.push(node)
 
-                    var link = {}
-                    // link.Id = data.resource.id;
-                    // link.Title = data.resource.name;
-                    link.type = data.resource.name
+                var link = {}
+                // link.Id = data.resource.id;
+                // link.Title = data.resource.name;
+                link.type = data.resource.name
+                link.direction = 'output'
+                if (data.resource.constraint_type === 'Parent') {  // down
+                    link.source = 0
+                    link.target = index
                     link.direction = 'output'
-                    if (data.resource.constraint_type === 'Parent') {  // down
-                        link.source = 1
-                        link.target = index
-                        link.direction = 'input'
-                    } else if (data.resource.constraint_type === 'Child') {  // down
-                        link.source = 1
-                        link.target = index
-                        link.direction = 'input'
-                    } else if (data.resource.constraint_type === 'ConnectFrom') {  // Left
-                        link.source = index
-                        link.target = 1
-                    } else if (data.resource.constraint_type === 'ConnectTo') {  // Right
-                        link.source = 1
-                        link.target = index
-                    }
+                } else if (data.resource.constraint_type === 'Child') {  // down
+                    link.source = 0
+                    link.target = index
+                    link.direction = 'output'
+                } else if (data.resource.constraint_type === 'ConnectFrom') {  // Left
+                    link.source = index
+                    link.target = 0
+                } else if (data.resource.constraint_type === 'ConnectTo') {  // Right
+                    link.source = 0
+                    link.target = index
+                }
 
-                    linkArray.push(link)
-                    console.log('index', index)
-                    if (index === nodeData.length) {
-                        console.log('linkArray', linkArray)
-                        console.log('nodeArray', nodeArray)
-                        graphData.nodes = nodeArray
-                        graphData.links = linkArray
-                        // update(linkArray, nodeArray)
-                        forceInitialize(graphData)
-                        // console.log(forceInitialize)
-                        console.log('------------------', JSON.stringify(graphData))
-                    }
-                    }
+                linkArray.push(link)
+                if (index === nodeData.length) {
+                    // console.log('linkArray', linkArray)
+                    // console.log('nodeArray', nodeArray)
+                    graphData.nodes = nodeArray
+                    graphData.links = linkArray
+                    console.log('------------------', JSON.stringify(graphData))
+                    // update(linkArray, nodeArray)
+                    forceInitialize(graphData)
+                    // console.log(forceInitialize)
+                }
             })
         }
     }
     render () {
+        // className={'margin-top: -390px'}
       return (
-        <div id='mainScreen' className={'margin-top: -390px'} >
+        <div id='mainScreen' >
           <svg id='diagramLayout' />
         </div>
       )
