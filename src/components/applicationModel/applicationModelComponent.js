@@ -359,8 +359,7 @@ class ApplicationModelComponent extends React.Component {
                     node.Attributes = ['']
                     node.width = 100
                     node.height = 50
-
-                    if (data.resource.constraint_type === 'Child') {  // down
+                    if (data.resource.constraint_type === 'Parent') {
                         if (data.resource.name.toLowerCase() === 'can be parent of') {
                             // set down target node
                             let downLength = downCordinates.length
@@ -403,6 +402,98 @@ class ApplicationModelComponent extends React.Component {
                                         y: 10
                                         }
                                     topCordinates.push(cor)
+                                    node.x = cor.x
+                                    node.y = cor.y
+                                }
+                            }
+                        } else {
+                            let rightLength = rightCordinates.length
+                            if (rightLength < 1) {
+                                let cor = {
+                                    x: 800,
+                                    y: 300
+                                    }
+                                rightCordinates.push(cor)
+                                node.x = cor.x
+                                node.y = cor.y
+                            } else {
+                                let prevCor = rightCordinates[rightLength - 1]
+                                if (typeof prevCor !== 'undefined') {
+                                    let cor = {
+                                        x: 800,
+                                        y: prevCor.y + 100
+                                    }
+                                    rightCordinates.push(cor)
+                                    node.x = cor.x
+                                    node.y = cor.y
+                                }
+                            }
+                        }
+                    } else if (data.resource.constraint_type === 'Child') {  // down
+                        if (data.resource.name.toLowerCase() === 'can be parent of') {
+                            // set down target node
+                            let downLength = downCordinates.length
+                            if (downLength < 1) {
+                            let cor = {
+                                x: 200,
+                                y: 900
+                                }
+                            downCordinates.push(cor)
+                            node.x = cor.x
+                            node.y = cor.y
+                            } else {
+                                let prevCor = downCordinates[downLength - 1]
+                                if (typeof prevCor !== 'undefined') {
+                                    let cor = {
+                                        x: prevCor.x + 200,
+                                        y: 900
+                                        }
+                                    downCordinates.push(cor)
+                                    node.x = cor.x
+                                    node.y = cor.y
+                                }
+                            }
+                        } else if (data.resource.name.toLowerCase() === 'can be child of') {
+                            // set top target node
+                            let topLength = topCordinates.length
+                            if (topLength < 1) {
+                            let cor = {
+                                x: 200,
+                                y: 10
+                                }
+                            topCordinates.push(cor)
+                            node.x = cor.x
+                            node.y = cor.y
+                            } else {
+                                let prevCor = topCordinates[topLength - 1]
+                                if (typeof prevCor !== 'undefined') {
+                                    let cor = {
+                                        x: prevCor.x + 200,
+                                        y: 10
+                                        }
+                                    topCordinates.push(cor)
+                                    node.x = cor.x
+                                    node.y = cor.y
+                                }
+                            }
+                        } else {
+                            let rightLength = rightCordinates.length
+                            if (rightLength < 1) {
+                                let cor = {
+                                    x: 800,
+                                    y: 300
+                                    }
+                                rightCordinates.push(cor)
+                                node.x = cor.x
+                                node.y = cor.y
+                            } else {
+                                let prevCor = rightCordinates[rightLength - 1]
+                                if (typeof prevCor !== 'undefined') {
+                                    let cor = {
+                                        x: 800,
+                                        y: prevCor.y + 100
+                                    }
+                                    rightCordinates.push(cor)
                                     node.x = cor.x
                                     node.y = cor.y
                                 }
@@ -463,7 +554,11 @@ class ApplicationModelComponent extends React.Component {
                     // link.Title = data.resource.name;
                     link.type = data.resource.name
                     link.direction = 'output'
-                    if (data.resource.constraint_type === 'Child') {  // down
+                    if (data.resource.constraint_type === 'Parent') {  // down
+                        link.source = 1
+                        link.target = index
+                        link.direction = 'input'
+                    } else if (data.resource.constraint_type === 'Child') {  // down
                         link.source = 1
                         link.target = index
                         link.direction = 'input'
