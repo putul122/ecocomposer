@@ -4,11 +4,11 @@ import React from 'react'
 import $ from 'jquery/dist/jquery'
 // import _ from 'lodash'
 import * as d3 from 'd3'
-// import './applicationModelComponent.scss'
+import './applicationModelComponent.scss'
 
 // let colors = d3.scaleOrdinal(d3.schemeCategory10)
-let width = 1200
-let height = 2500
+let width = 950
+let height = 2000
 // let nodeWidth = 100
 // let nodeHeight = 50
 // let circleRadius = 2
@@ -19,13 +19,29 @@ let simulation
 // }
 
 function forceInitialize (graphData) {
+    // container = svg.append("g")
+    // function zoomed () {
+    //     container.attr('transform', 'translate(' + d3.event.translate + ')scale(' + d3.event.scale + ')')
+    // }
+
+    // let zoom = d3.behavior.zoom()
+    // .scaleExtent([1, 10])
+    // .on('zoom', zoomed)
+
     diagramLayout = d3.select('#diagramLayout')
       .attr('id', 'diagramLayout') // set id
       .attr('width', width) // set width
       .attr('height', height) // set height
+      .call(d3.zoom().on('zoom', zoomed))
+      .attr('display', 'block')
+      // .attr('viewBox', '0 0 1200 800')
       .append('g')
       .attr('transform', 'translate(' + 20 + ',' + 20 + ')')
+      // .call(zoom)
 
+    function zoomed () {
+        diagramLayout.attr('transform', d3.event.transform)
+    }
     // markerRefx = 35
     console.log('diagramLayout', diagramLayout)
 
@@ -35,7 +51,7 @@ function forceInitialize (graphData) {
         return d.id
       }).distance(100).strength(0))
       .force('charge', d3.forceManyBody().distanceMin(10).distanceMax(30))
-      .force('centre', d3.forceCenter(width / 2, height / 2))
+      // .force('centre', d3.forceCenter(width / 2, height / 2))
       // .force("x", d3.forceX(55))
       // .force("y", d3.forceY(45))
       .force('collide', d3.forceCollide().radius(function (d) {
@@ -61,7 +77,6 @@ function force (graphData) {
       // .attr('marker-end','url(#arrowhead)')
 
     linkEnter.append('title').text(function (d) { return d.label })
-    console.log('steps', diagramLayout.selectAll('.edgepath').data(graphData.links))
     var link = diagramLayout.selectAll('.edgepath')
         .data(graphData.links)
         .enter()
@@ -217,7 +232,6 @@ function force (graphData) {
         return 'translate(' + d.x + ',' + d.y + ')'
       })
     }
-
     // function dragstarted (d) {
     //   if (!d3.event.active) simulation.alphaTarget(0.3).restart()
     //   d.fx = d.x
@@ -269,41 +283,41 @@ function force (graphData) {
       if (x <= midX) { // check "left" side
         var minXy = m * (minX - x) + y
         if (minY <= minXy && minXy <= maxY) {
-return {
-            x: minX,
-            y: minXy
-          }
-}
+        return {
+                    x: minX,
+                    y: minXy
+                }
+        }
       }
 
       if (x >= midX) { // check "right" side
         var maxXy = m * (maxX - x) + y
         if (minY <= maxXy && maxXy <= maxY) {
- return {
-            x: maxX,
-            y: maxXy
-          }
-}
+        return {
+                    x: maxX,
+                    y: maxXy
+                }
+        }
       }
 
       if (y <= midY) { // check "top" side
         var minYx = (minY - y) / m + x
         if (minX <= minYx && minYx <= maxX) {
-return {
-            x: minYx,
-            y: minY
-          }
-}
+        return {
+                    x: minYx,
+                    y: minY
+                }
+        }
       }
 
       if (y >= midY) { // check "bottom" side
         var maxYx = (maxY - y) / m + x
         if (minX <= maxYx && maxYx <= maxX) {
- return {
-            x: maxYx,
-            y: maxY
-          }
-}
+        return {
+                    x: maxYx,
+                    y: maxY
+                }
+        }
       }
 
       // Should never happen :) If it does, please tell me!
@@ -581,7 +595,7 @@ class ApplicationModelComponent extends React.Component {
     render () {
         // className={'margin-top: -390px'}
       return (
-        <div id='mainScreen' style={{'margin-top': '-440px', 'margin-left': '-50px'}} >
+        <div id='mainScreen' >
           <svg id='diagramLayout' />
         </div>
       )
