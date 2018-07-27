@@ -36,6 +36,7 @@ export default function * watchComponentTypeComponent () {
 
 export function * getComponentTypeComponent (action) {
   try {
+    console.log('mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm', action)
     const componentTypes = yield call(
       axios.get,
       // api.getComponentTypes,
@@ -54,7 +55,7 @@ export function * getComponentTypeComponentProperties (action) {
       axios.get,
       // api.getComponentTypes,
       // {params: action.payload}
-      'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types/' + action.payload.id + '/properties'
+      'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/components/' + action.payload.id + '/properties'
     )
     yield put(actionCreators.fetchcomponentTypeComponentPropertiesSuccess(componentTypes.data))
   } catch (error) {

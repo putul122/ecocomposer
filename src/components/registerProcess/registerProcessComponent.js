@@ -7,14 +7,15 @@ export default function RegisterProcess (props) {
   let message
   if (!props.isAccountCreated && !props.isAbacusFileProvisioned && !props.isComposerModelConnected) {
     message = 'Creating your Composer Account....'
-  } else if (props.isAccountCreated && !props.isAbacusFileProvisioned && !props.isComposerModelConnected) {
-    message = 'Provising Sample Abacus Model....'
+  // } else if (props.isAccountCreated && !props.isAbacusFileProvisioned && !props.isComposerModelConnected) {
+  //   message = 'Provising Sample Abacus Model....'
   } else if (props.isAccountCreated && props.isAbacusFileProvisioned && !props.isComposerModelConnected) {
     message = 'Connecting Composer to Abacus'
   }
 
   // window.setTimeout(() => {
-  if (props.isAccountCreated && props.isAbacusFileProvisioned && props.isComposerModelConnected && props.registerProcessStatus === 'Completed') {
+  // if (props.isAccountCreated && props.isAbacusFileProvisioned && props.isComposerModelConnected && props.registerProcessStatus === 'Completed') {
+  if (props.isAccountCreated && props.isComposerModelConnected && props.registerProcessStatus === 'Completed') {
     return (
       <Redirect to='/home' push />
     )
@@ -28,20 +29,20 @@ export default function RegisterProcess (props) {
           <div className={(!props.isAccountCreated || !props.isAbacusFileProvisioned || !props.isComposerModelConnected) ? styles.loader : ''} />
         </div>
       </div>
-      <div className='row'>
-        <div className='col-sm-4 text-center' >
+      <div className='row clearfix'>
+        <div className='col-sm-6 text-center' >
           <label htmlFor='viewstats'>
             <input type='checkbox' checked={props.isAccountCreated} className='checkboxprop' /><br />
             <span className={styles.labeltext}>Account created</span>
           </label>
         </div>
-        <div className='col-sm-4 text-center' >
+        {/* <div className='col-sm-4 text-center' >
           <label htmlFor='viewstats'>
             <input type='checkbox' checked={props.isAbacusFileProvisioned} className='checkboxprop' /><br />
             <span className={styles.labeltext}> Abacus File Provisioned</span>
           </label>
-        </div>
-        <div className='col-sm-4 text-center' >
+        </div> */}
+        <div className='col-sm-6 text-center' >
           <label htmlFor='viewstats'>
             <input type='checkbox' checked={props.isComposerModelConnected} className='checkboxprop' /><br />
             <span className={styles.labeltext}>Composer Model Connected</span>

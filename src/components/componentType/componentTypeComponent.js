@@ -1,8 +1,8 @@
 import React from 'react'
 import styles from './componentTypeComponent.scss'
 import PropTypes from 'prop-types'
-import { Link, Route } from 'react-router-dom'
-import applicationDetailPageRoute from '../../routes/applicationDetailPage/applicationDetailPageRoute'
+import { Link } from 'react-router-dom'
+// import applicationDetailPageRoute from '../../routes/applicationDetailPage/applicationDetailPageRoute'
 
 export default function ComponentType (props) {
   console.log('-com-', props)
@@ -123,7 +123,7 @@ export default function ComponentType (props) {
         <div className='text-center justify-content-center'>
           <a href='' className={previousClass} onClick={handlePrevious}>Previous</a> Page {currentPage} of {totalNoPages} <a href='' className={nextClass} onClick={handleNext}>Next</a>
         </div>
-        <Route path={`/components/:componentTypeId`} component={applicationDetailPageRoute} />
+        {/* <Route path={`/components/:componentTypeId`} component={applicationDetailPageRoute} /> */}
       </div>
       )}
     </div>

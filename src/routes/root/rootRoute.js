@@ -16,7 +16,8 @@ export default class Root extends Component {
 	ComponentsRoute = (props) => (
   <Switch>
     <Route exact path='/components' component={(props) => this.loadView('components', props)} />
-    <Route path='/components/:id' component={(props) => this.loadView('applicationDetail', props)} />
+    <Route exact path='/components/:id' component={(props) => this.loadView('applicationDetail', props)} />
+    <Route path='/components/:componentTypeId/:componentId' component={(props) => this.loadView('componentTypeComponent', props)} />
   </Switch>
 	)
 
@@ -117,11 +118,11 @@ export default class Root extends Component {
         <Route path='/landing' component={(props) => this.loadView('landing', props)} />
         <Route path='/registering' component={(props) => this.loadView('registerProcess', props)} />
         <Route path='/home' component={(props) => this.loadView('home', props)} />
-        <Route path='/componentTypeComponents' component={(props) => this.loadView('componentTypeComponent', props)} />
+        {/* <Route path='/componentTypeComponents' component={(props) => this.loadView('componentTypeComponent', props)} /> */}
         <Route path='/components' component={(props) => this.ComponentsRoute(props)} />
         {/* <Route path='/components' component={(props) => this.loadView('components', props)} /> */}
         {/* <Route path='/:id' component={(props) => this.loadView('applicationDetail', props)} /> */}
-        <Route path='/:id' component={(props) => this.loadView('componentTypeComponent', props)} />
+        {/* <Route path='/:id' component={(props) => this.loadView('componentTypeComponent', props)} /> */}
       </Switch>
     </BrowserRouter>
   </AppWrapper>

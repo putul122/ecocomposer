@@ -42,18 +42,18 @@ export default compose(
           this.props.fetchRegisterProcess && this.props.fetchRegisterProcess()
         }
       }, 2000)
-      window.setTimeout(() => {
-        this.props.abacusFileProvisioned && this.props.abacusFileProvisioned(true)
-        if (this.props.registerProcessStatus !== 'Completed') {
-          this.props.fetchRegisterProcess && this.props.fetchRegisterProcess()
-        }
-      }, 4000)
+      // window.setTimeout(() => {
+      //   this.props.abacusFileProvisioned && this.props.abacusFileProvisioned(true)
+      //   if (this.props.registerProcessStatus !== 'Completed') {
+      //     this.props.fetchRegisterProcess && this.props.fetchRegisterProcess()
+      //   }
+      // }, 4000)
       window.setTimeout(() => {
         this.props.composerModelConnected && this.props.composerModelConnected(true)
         if (this.props.registerProcessStatus !== 'Completed') {
           this.props.fetchRegisterProcess && this.props.fetchRegisterProcess()
         }
-      }, 6000)
+      }, 4000)
     },
     componentDidUpdate: function () {
       if (this.props.registerProcessStatus !== 'Completed') {

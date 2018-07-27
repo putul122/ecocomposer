@@ -6,7 +6,7 @@ import { actionCreators as basicActionCreators } from '../../redux/reducers/basi
 console.log('saga', sagaActions)
 // Global State
 export function mapStateToProps (state, props) {
-  console.log('app detail state', state)
+  console.log('com type com detail state', state)
   return {
     componentTypeComponentData: state.componentTypeComponentReducer.componentTypeComponentData,
     componentTypeComponentProperties: state.componentTypeComponentReducer.componentTypeComponentProperties,
@@ -17,6 +17,7 @@ export function mapStateToProps (state, props) {
 // In Object form, each funciton is automatically wrapped in a dispatch
 export const propsMapping: Callbacks = {
   setBreadcrumb: basicActionCreators.setBreadcrumb,
+  fetchComponentById: sagaActions.applicationDetailActions.fetchComponentById,
   fetchComponentTypeComponent: sagaActions.componentTypeComponentActions.fetchComponentTypeComponent,
   fetchcomponentTypeComponentProperties: sagaActions.componentTypeComponentActions.fetchcomponentTypeComponentProperties,
   fetchcomponentTypeComponentRelationships: sagaActions.componentTypeComponentActions.fetchcomponentTypeComponentRelationships
@@ -34,16 +35,22 @@ export default compose(
   lifecycle({
     componentWillMount: function () {
       console.log('com typecom cont', this.props)
-      const componentTypeComponentId = this.props.match.params.id
+      const componentTypeComponentId = this.props.match.params.componentId
+      const componentTypeId = this.props.match.params.componentTypeId
       let payload = {
+        'componentTypeId': componentTypeId,
+        'componentTypeComponentId': componentTypeComponentId,
         'id': componentTypeComponentId
       }
+      this.props.fetchComponentById && this.props.fetchComponentById({id: componentTypeId})
       this.props.fetchComponentTypeComponent && this.props.fetchComponentTypeComponent(payload)
       this.props.fetchcomponentTypeComponentProperties && this.props.fetchcomponentTypeComponentProperties(payload)
       this.props.fetchcomponentTypeComponentRelationships && this.props.fetchcomponentTypeComponentRelationships(payload)
     },
     componentWillReceiveProps: function (nextProps) {
-      if (nextProps.componentTypeComponentData && (nextProps.componentTypeComponentData !== this.props.componentTypeComponentData)) {
+      console.log('will receive props mmmmmmmmmmmmm', nextProps)
+      if (nextProps.componentTypeComponentData && nextProps.componentDetail && (nextProps.componentTypeComponentData !== this.props.componentTypeComponentData)) {
+        console.log('inside com Xxxxxxxxxxxxxxxxxxxxx', this.props, nextProps)
         let breadcrumb = {
           title: nextProps.componentTypeComponentData.data.resource.name,
           items: [
@@ -64,8 +71,8 @@ export default compose(
               separator: true
             },
             {
-              name: this.props.componentDetail.resource.name ? this.props.componentDetail.resource.name : '',
-              href: '/components/' + this.props.componentDetail.resource.id,
+              name: nextProps.componentDetail.resource.name ? this.props.componentDetail.resource.name : '',
+              href: '/components/' + nextProps.componentDetail.resource.id,
               separator: false
             },
             {
@@ -73,7 +80,7 @@ export default compose(
             },
             {
               name: nextProps.componentTypeComponentData.data.resource.name,
-              href: '/1', // nextProps.componentTypeComponentData.data.resource.id,
+              href: '/components/' + nextProps.componentDetail.resource.id + '/' + nextProps.componentTypeComponentData.data.resource.id,
               separator: false
             }
           ]

@@ -7,8 +7,8 @@ import * as d3 from 'd3'
 import './applicationModelComponent.scss'
 
 // let colors = d3.scaleOrdinal(d3.schemeCategory10)
-let width = 950
-let height = 2000
+let width = 900
+let height = 900
 // let nodeWidth = 100
 // let nodeHeight = 50
 // let circleRadius = 2
@@ -83,7 +83,7 @@ function force (graphData) {
         .append('path')
         .attr('class', 'edgepath')
         .attr('fill-opacity', 0)
-        .attr('stroke-opacity', 0.6)
+        // .attr('stroke-opacity', 0.6)
         .attr('stroke', '#000')
         .attr('id', function (d, i) { return 'edgepath' + i })
         // .attrs({
@@ -180,12 +180,13 @@ function force (graphData) {
       .attr('rx', 10)
       .attr('width', 90)
       .attr('height', 45)
-      .attr('stroke-width', function (d) {
-        return Math.sqrt(2)
-      })
-      .attr('stroke-opacity', '0.3')
-      .attr('stroke', '#000')
-      .attr('fill', 'steelblue')
+    //   .attr('stroke-width', function (d) {
+    //     return Math.sqrt(2)
+    //   })
+      .attr('stroke-width', 2)
+    //   .attr('stroke-opacity', '0.3')
+      .attr('stroke', '#000000')
+      .attr('fill', '#FFFFFF')
       // .style('fill', function (d, i) { return colors(i) })
 
     nodeEnter.append('title')
@@ -584,16 +585,13 @@ class ApplicationModelComponent extends React.Component {
                     // console.log('nodeArray', nodeArray)
                     graphData.nodes = nodeArray
                     graphData.links = linkArray
-                    console.log('------------------', JSON.stringify(graphData))
-                    // update(linkArray, nodeArray)
+                    // console.log('------------------', JSON.stringify(graphData))
                     forceInitialize(graphData)
-                    // console.log(forceInitialize)
                 }
             })
         }
     }
     render () {
-        // className={'margin-top: -390px'}
       return (
         <div id='mainScreen' >
           <svg id='diagramLayout' />
