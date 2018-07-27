@@ -6,8 +6,6 @@ import { actionCreators as componentTypeActioncreators } from '../../redux/reduc
 import { actionCreators as basicActionCreators } from '../../redux/reducers/basicReducer/basicReducerReducer'
 // Global State
 export function mapStateToProps (state, props) {
-  console.log('container props', props)
-  console.log('component container state', state)
   return {
     componentTypes: state.componentTypeReducer.componentTypes,
     // searchComponentType: state.componentTypeReducer.searchComponentType,

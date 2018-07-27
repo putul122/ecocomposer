@@ -48,7 +48,7 @@ export default function ComponentTypeComponent (props) {
           // </div>
           <div className='m-accordion__item'>
             <div className='m-accordion__item-head collapsed' role='tab' id='m_accordion_2_item_1_head' data-toggle='collapse' href={'#m_accordion_2_item_1_body' + index} aria-expanded='false'>
-              <span className='m-accordion__item-title'>{componentTypeComponentName} {relations.resource.constraint_type} {relations.resource.target_component_type_name}</span>
+              <span className='m-accordion__item-title'>{relations.resource.component_type_name} {relations.resource.constraint_type} {relations.resource.target_component_type_name}</span>
               <span className='m-accordion__item-mode' />
             </div>
             <div className='m-accordion__item-body collapse' id={'m_accordion_2_item_1_body' + index} role='tabpanel' aria-labelledby='m_accordion_2_item_1_head' data-parent='#m_accordion_2' style={{}}>

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 
 export default function Breadcrumb (props) {
   console.log('Bread crumb', props)
@@ -17,9 +17,9 @@ export default function Breadcrumb (props) {
         } else {
           return (
             <li key={index} className='m-nav__item'>
-              <Link to={object.href} className='m-nav__link'>
+              <a href={object.href} className='m-nav__link'>
                 <span className='m-nav__link-text'>{object.name}</span>
-              </Link>
+              </a>
             </li>
           )
         }
@@ -44,7 +44,7 @@ export default function Breadcrumb (props) {
         </div>
         <div>
           <div className='m-dropdown m-dropdown--inline m-dropdown--arrow m-dropdown--align-right m-dropdown--align-push' m-dropdown-toggle='hover' aria-expanded='true'>
-            <a href='' className='m-portlet__nav-link btn btn-lg btn-secondary  m-btn m-btn--outline-2x m-btn--air m-btn--icon m-btn--icon-only m-btn--pill  m-dropdown__toggle'>
+            <a href='javascript:void(o);' className='m-portlet__nav-link btn btn-lg btn-secondary  m-btn m-btn--outline-2x m-btn--air m-btn--icon m-btn--icon-only m-btn--pill  m-dropdown__toggle'>
               <i className='la la-plus m--hide' />
               <i className='la la-ellipsis-h' />
             </a>
