@@ -14,8 +14,14 @@ const api = {
     getComponentComponent: function (componentTypeId) {
         return 'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types/' + componentTypeId + '/components'
     },
-    getComponent: function (componentTypeId, componentId) {
-        return 'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types/' + componentTypeId + '/components/' + componentId
+    getComponent: function (payload) {
+        return 'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types/' + payload.componentTypeId + '/components/' + payload.componentTypeComponentId
+    },
+    getComponentProperty: function (payload) {
+        return 'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/components/' + payload.componentTypeComponentId + '/properties'
+    },
+    getComponentRelationships: function (payload) {
+        return 'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/components/' + payload.componentTypeComponentId + '/componentrelationships'
     }
   }
 

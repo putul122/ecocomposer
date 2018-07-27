@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { takeLatest, call, put } from 'redux-saga/effects'
 import { createAction } from 'redux-actions'
-// import api from '../../../constants'
+import api from '../../../constants'
 
 // Saga action strings
 export const FETCH_COMPONENT_TYPE_COMPONENT = 'saga/componentTypeComponent/FETCH_COMPONENT_TYPE_COMPONENT'
@@ -36,12 +36,10 @@ export default function * watchComponentTypeComponent () {
 
 export function * getComponentTypeComponent (action) {
   try {
-    console.log('mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm', action)
     const componentTypes = yield call(
       axios.get,
-      // api.getComponentTypes,
+      api.getComponent(action.payload)
       // {params: action.payload}
-      'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/component_types/' + action.payload.id + '/components/' + action.payload.id
     )
     yield put(actionCreators.fetchComponentTypeComponentSuccess(componentTypes.data))
   } catch (error) {
@@ -53,9 +51,8 @@ export function * getComponentTypeComponentProperties (action) {
   try {
     const componentTypes = yield call(
       axios.get,
-      // api.getComponentTypes,
+      api.getComponentProperty(action.payload)
       // {params: action.payload}
-      'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/components/' + action.payload.id + '/properties'
     )
     yield put(actionCreators.fetchcomponentTypeComponentPropertiesSuccess(componentTypes.data))
   } catch (error) {
@@ -64,15 +61,14 @@ export function * getComponentTypeComponentProperties (action) {
 }
 
 export function * getComponentTypeComponentRelationships (action) {
-    try {
-      const componentTypes = yield call(
-        axios.get,
-        // api.getComponentTypes,
-        // {params: action.payload}
-        'https://ecocomposermockapis.azurewebsites.net/ecocomposer-meta-model/components/' + action.payload.id + '/componentrelationships'
-      )
-      yield put(actionCreators.fetchcomponentTypeComponentRelationshipsSuccess(componentTypes.data))
-    } catch (error) {
-      yield put(actionCreators.fetchcomponentTypeComponentRelationshipsFailure(error))
-    }
+  try {
+    const componentTypes = yield call(
+      axios.get,
+      api.getComponentRelationships(action.payload)
+      // {params: action.payload}
+    )
+    yield put(actionCreators.fetchcomponentTypeComponentRelationshipsSuccess(componentTypes.data))
+  } catch (error) {
+    yield put(actionCreators.fetchcomponentTypeComponentRelationshipsFailure(error))
   }
+}
