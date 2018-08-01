@@ -1,6 +1,7 @@
 import React from 'react'
 import styles from './applicationDetailComponent.scss'
 import PropTypes from 'prop-types'
+import _ from 'lodash'
 // import ApplicationModelComponent for graph Model Visualization
 import ApplicationModelComponent from '../applicationModel/applicationModelComponent'
 import { Link, Route } from 'react-router-dom'
@@ -27,6 +28,8 @@ export default function ApplicationDetail (props) {
   let totalComponentTypeComponent
   let pageArray = []
   let ComponentTypeId
+  let listPage = []
+  let paginationLimit = 4
   // let paginationList
   console.log('Appppppppppppppppppppppppppppp details props', props)
   if (props.componentDetail !== '') {
@@ -65,6 +68,11 @@ export default function ApplicationDetail (props) {
       pageArray.push(pageParameter)
       i++
     }
+    pageArray = _.chunk(pageArray, paginationLimit)
+    listPage = _.filter(pageArray, function (group) {
+      let found = _.filter(group, {'number': currentPage})
+      if (found.length > 0) { return group }
+    })
   //   paginationList = pageArray.map(function (page, index) {
   //     if (page.number === currentPage) {
   //       page.class = 'm-datatable__pager-link--active'
@@ -89,12 +97,17 @@ export default function ApplicationDetail (props) {
         'ComponentTypeComponent': {
           'search': searchTextBox.value ? searchTextBox.value : '',
           'page_size': 10,
-          'page': currentPage - 1
+          'page': currentPage - 1,
+          'recommended': searchTextBox.value === ''
         }
       }
       props.fetchComponentComponent(payload)
       props.setCurrentPage(currentPage - 1)
     }
+    listPage = _.filter(pageArray, function (group) {
+      let found = _.filter(group, {'number': currentPage - 1})
+      if (found.length > 0) { return group }
+    })
   }
 
   let handleNext = function (event) {
@@ -107,12 +120,23 @@ export default function ApplicationDetail (props) {
       'ComponentTypeComponent': {
         'search': searchTextBox.value ? searchTextBox.value : '',
         'page_size': 10,
-        'page': currentPage + 1
+        'page': currentPage + 1,
+        'recommended': searchTextBox.value === ''
       }
     }
     props.fetchComponentComponent(payload)
       props.setCurrentPage(currentPage + 1)
     }
+    listPage = _.filter(pageArray, function (group) {
+      let found = _.filter(group, {'number': currentPage + 1})
+      if (found.length > 0) { return group }
+    })
+    console.log('curr page --', currentPage)
+    console.log('handle next', listPage)
+    console.log('handle next', pageArray)
+    console.log('handle slice 1', pageArray.slice(0, 4))
+    console.log('handle slice 2', pageArray.slice(4, 8))
+    console.log('handle slice 3', pageArray.slice(8))
   }
 
   let handlePage = function (page) {
@@ -127,11 +151,17 @@ export default function ApplicationDetail (props) {
       'ComponentTypeComponent': {
         'search': searchTextBox.value ? searchTextBox.value : '',
         'page_size': 10,
-        'page': page
+        'page': page,
+        'recommended': searchTextBox.value === ''
       }
     }
     props.fetchComponentComponent(payload)
     props.setCurrentPage(page)
+
+    listPage = _.filter(pageArray, function (group) {
+      let found = _.filter(group, {'number': page})
+      if (found.length > 0) { return group }
+    })
   }
 
   let handleInputChange = function (event) {
@@ -151,6 +181,10 @@ export default function ApplicationDetail (props) {
         // props.setComponentTypeLoading(true)
       // }
     // }
+    listPage = _.filter(pageArray, function (group) {
+      let found = _.filter(group, {'number': currentPage})
+      if (found.length > 0) { return group }
+    })
   }
   return (
     <div>
@@ -210,16 +244,16 @@ export default function ApplicationDetail (props) {
                     <ul className='m-datatable__pager-nav'>
                       {/* <li><a href='' title='First' className='m-datatable__pager-link m-datatable__pager-link--first' data-page={1}><i className='la la-angle-double-left' /></a></li> */}
                       <li><a href='' title='Previous' className={'m-datatable__pager-link m-datatable__pager-link--prev ' + previousClass} onClick={handlePrevious} data-page='4'><i className='la la-angle-left' /></a></li>
-                      {pageArray && pageArray.map(function (page, index) {
-                            if (page.number === currentPage) {
-                              page.class = 'm-datatable__pager-link--active'
-                            } else {
-                              page.class = ''
-                            }
-                            return (<li key={index} >
-                              <a href='' className={'m-datatable__pager-link m-datatable__pager-link-number ' + page.class} data-page={page.number} title={page.number} onClick={(event) => { event.preventDefault(); handlePage(page.number) }} >{page.number}</a>
-                            </li>)
-                          })}
+                      {listPage[0] && listPage[0].map(function (page, index) {
+                          if (page.number === currentPage) {
+                            page.class = 'm-datatable__pager-link--active'
+                          } else {
+                            page.class = ''
+                          }
+                          return (<li key={index} >
+                            <a href='' className={'m-datatable__pager-link m-datatable__pager-link-number ' + page.class} data-page={page.number} title={page.number} onClick={(event) => { event.preventDefault(); handlePage(page.number) }} >{page.number}</a>
+                          </li>)
+                        })}
                       <li><a href='' title='Next' className={'m-datatable__pager-link m-datatable__pager-link--next ' + nextClass} onClick={handleNext} data-page='4'><i className='la la-angle-right' /></a></li>
                       {/* <li><a href='' title='Last' className='m-datatable__pager-link m-datatable__pager-link--last' data-page={18}><i className='la la-angle-double-right' /></a></li> */}
                     </ul>

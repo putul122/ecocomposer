@@ -11,8 +11,14 @@ class LeftNavigation extends React.Component {
     <div id='m_aside_left' className='m-grid__item	m-aside-left  m-aside-left--skin-light '>
       {/* <!-- BEGIN: Brand --> */}
       <div className='m-brand  m-brand--skin-light '>
-        <a href='/' className='m-brand__logo'>
-          <img alt='' src='assets/demo/demo7/media/img/logo/logo.png' />
+        {/* <a href='/' className='m-brand__logo'>
+        <img alt='' src='assets/demo/demo7/media/img/logo/logo.png' />
+        </a> */}
+        {/* <a href='/'>
+        <img alt='' src='assets/ECO-Conductor.png' />
+        </a> */}
+        <a href='/'>
+          <img alt='' src='assets/ECO Conductor.png' width='100px' height='100px' />
         </a>
       </div>
       {/* <!-- END: Brand --> */}

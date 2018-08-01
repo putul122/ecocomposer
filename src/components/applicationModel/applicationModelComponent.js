@@ -19,25 +19,14 @@ let simulation
 // }
 
 function forceInitialize (graphData) {
-    // container = svg.append("g")
-    // function zoomed () {
-    //     container.attr('transform', 'translate(' + d3.event.translate + ')scale(' + d3.event.scale + ')')
-    // }
-
-    // let zoom = d3.behavior.zoom()
-    // .scaleExtent([1, 10])
-    // .on('zoom', zoomed)
-
     diagramLayout = d3.select('#diagramLayout')
       .attr('id', 'diagramLayout') // set id
       .attr('width', width) // set width
       .attr('height', height) // set height
       .call(d3.zoom().on('zoom', zoomed))
       .attr('display', 'block')
-      // .attr('viewBox', '0 0 1200 800')
       .append('g')
       .attr('transform', 'translate(' + 20 + ',' + 20 + ')')
-      // .call(zoom)
 
     function zoomed () {
         diagramLayout.attr('transform', d3.event.transform)
@@ -86,13 +75,6 @@ function force (graphData) {
         // .attr('stroke-opacity', 0.6)
         .attr('stroke', '#000')
         .attr('id', function (d, i) { return 'edgepath' + i })
-        // .attrs({
-        //     'class': 'edgepath',
-        //     'fill-opacity': 0,
-        //     'stroke-opacity': 0.6,
-        //     'stroke': '#000',
-        //     'id': function (d, i) { return 'edgepath' + i }
-        // })
         // .style('pointer-events', 'none')
 
         var edgelabels = diagramLayout.selectAll('.edgelabel')
@@ -105,13 +87,6 @@ function force (graphData) {
             .attr('font-size', 12)
             .attr('font-family', 'sans-serif')
             .attr('fill', '#000')
-            // .attrs({
-            //     'class': 'edgelabel',
-            //     'id': function (d, i) { return 'edgelabel' + i },
-            //     'font-size': 12,
-            //     'font-family': 'sans-serif',
-            //     'fill': '#000'
-            // })
 
         edgelabels.append('textPath')
             .attr('xlink:href', function (d, i) { return '#edgepath' + i })
@@ -136,7 +111,7 @@ function force (graphData) {
           .attr('fill', '#000')
           .append('svg:path')
           .attr('d', 'M0,-5L10,0L0,5')
-          .style('stroke-width', '0.3px')
+          .style('stroke-width', '0.1px')
           .attr('transform', 'rotate(180,5, 0)')
       } else if (d.direction === 'output') {
         diagramLayout.append('svg:defs').selectAll('marker') //
@@ -153,7 +128,7 @@ function force (graphData) {
           .attr('fill', '#000')
           .append('svg:path')
           .attr('d', 'M0,-5L10,0L0,5')
-          .style('stroke-width', '0.3px')
+          .style('stroke-width', '0.1px')
       }
     })
 
@@ -178,8 +153,8 @@ function force (graphData) {
       .attr('x', -20)
       .attr('y', -20)
       .attr('rx', 10)
-      .attr('width', 90)
-      .attr('height', 45)
+      .attr('width', function (node, i) { return node.width })
+      .attr('height', function (node, i) { return node.height })
     //   .attr('stroke-width', function (d) {
     //     return Math.sqrt(2)
     //   })
@@ -193,8 +168,8 @@ function force (graphData) {
       .text(function (d) { return d.title })
 
     nodeEnter.append('text')
-          .attr('x', (90 / 2) - 20)
-          .attr('y', (45 / 2) - 20)
+          .attr('x', function (node, i) { return ((node.width / 2) - 20) })
+          .attr('y', function (node, i) { return ((node.height / 2) - 20) })
           .attr('dy', '.25em')
           .attr('text-anchor', 'middle')
           .attr('font-size', 10)
@@ -351,8 +326,8 @@ class ApplicationModelComponent extends React.Component {
             node.id = 0
             node.name = nodeData[0].resource.component_type_name
             node.Title = nodeData[0].resource.component_type_name
-            node.width = 100
-            node.height = 50
+            node.width = 140
+            node.height = 70
             node.x = 400
             node.y = 450
             node.Attributes = ['']
@@ -366,8 +341,8 @@ class ApplicationModelComponent extends React.Component {
                 node.name = data.resource.target_component_type_name
                 node.Title = data.resource.target_component_type_name
                 node.Attributes = ['']
-                node.width = 100
-                node.height = 50
+                node.width = 90
+                node.height = 45
                 if (data.resource.constraint_type === 'Parent') {
                     if (data.resource.name.toLowerCase() === 'can be parent of') {
                         // set down target node
@@ -567,7 +542,7 @@ class ApplicationModelComponent extends React.Component {
                     link.source = 0
                     link.target = index
                     link.direction = 'output'
-                } else if (data.resource.constraint_type === 'Child') {  // down
+                } else if (data.resource.constraint_type === 'Child') {  // up
                     link.source = 0
                     link.target = index
                     link.direction = 'output'
