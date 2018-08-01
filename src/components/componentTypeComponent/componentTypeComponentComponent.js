@@ -1,6 +1,8 @@
 import React from 'react'
 import styles from './componentTypeComponentComponent.scss'
 import PropTypes from 'prop-types'
+import relationshipData from './mockData'
+import _ from 'lodash'
 
 export default function ComponentTypeComponent (props) {
     let componentTypeComponentName
@@ -10,7 +12,12 @@ export default function ComponentTypeComponent (props) {
     let componentTypeComponentRelName
     let componentTypeComponentChildName
     let componentTypeComponentRelationshipsList
-    let componentTypeComponentRelationships = props.componentTypeComponentRelationships.data
+    let componentTypeComponentRelationships = relationshipData.resources // props.componentTypeComponentRelationships.data
+    let parentComponentRelationshipList
+    let outgoingComponentRelationshipList
+    let incomingComponentRelationshipList
+    let childComponentRelationshipList
+
     console.log('name', componentTypeComponentRelName)
     console.log('name', componentTypeComponentChildName)
     console.log('name', componentTypeComponentRelationshipsList)
@@ -36,25 +43,117 @@ export default function ComponentTypeComponent (props) {
     }
 
     if (typeof componentTypeComponentRelationships !== 'undefined') {
-      componentTypeComponentRelationshipsList = componentTypeComponentRelationships.map(function (relations, index) {
+      let parent = _.filter(componentTypeComponentRelationships, {'constraint_type': 'Parent'})
+      let outgoing = _.filter(componentTypeComponentRelationships, {'constraint_type': 'Outgoing'})
+      outgoing = _.orderBy(outgoing, ['connection_type_name', 'target_component_type_name'], ['asc', 'asc'])
+      let incoming = _.filter(componentTypeComponentRelationships, {'constraint_type': 'Incoming'})
+      incoming = _.orderBy(incoming, ['connection_type_name', 'related_component_name'], ['asc', 'asc'])
+      let child = _.filter(componentTypeComponentRelationships, {'constraint_type': 'Child'})
+
+      parentComponentRelationshipList = function () {
+        let childElementList = parent.map(function (element, i) {
+          return (<a>{element.related_component_name}</a>)
+        })
         return (
-          // <div>
-          //   <p>{relations.resource.target_component_type_name}</p>
-          //   {/* <a>{relations.resource.name}</a> */}
-          // </div>
           <div className='m-accordion__item'>
-            <div className='m-accordion__item-head collapsed' role='tab' id='m_accordion_2_item_1_head' data-toggle='collapse' href={'#m_accordion_2_item_1_body' + index} aria-expanded='false'>
-              <span className='m-accordion__item-title'>{relations.resource.component_type_name} {relations.resource.name} {relations.resource.target_component_type_name}</span>
+            <div className='m-accordion__item-head collapsed' role='tab' id='m_accordion_2_item_1_head' data-toggle='collapse' href={'#m_accordion_2_item_1_body' + parent[0].constraint_type} aria-expanded='false'>
+              <span className='m-accordion__item-title'>{parent[0].component_name} {parent[0].constraint_type} {'Components'}</span>
               <span className='m-accordion__item-mode' />
             </div>
-            <div className='m-accordion__item-body collapse' id={'m_accordion_2_item_1_body' + index} role='tabpanel' aria-labelledby='m_accordion_2_item_1_head' data-parent='#m_accordion_2' style={{}}>
+            <div className='m-accordion__item-body collapse' id={'m_accordion_2_item_1_body' + parent[0].constraint_type} role='tabpanel' aria-labelledby='m_accordion_2_item_1_head' data-parent='#m_accordion_2' style={{}}>
               <div className='m-accordion__item-content'>
-                {/* <a>{relations.resource.name}</a> */}
+                {childElementList}
               </div>
             </div>
           </div>
           )
-      })
+      }
+      childComponentRelationshipList = function () {
+        let childElementList = child.map(function (element, i) {
+          return (<span><a>{element.related_component_name}</a><br /></span>)
+        })
+        return (
+          <div className='m-accordion__item'>
+            <div className='m-accordion__item-head collapsed' role='tab' id='m_accordion_2_item_1_head' data-toggle='collapse' href={'#m_accordion_2_item_1_body' + child[0].constraint_type} aria-expanded='false'>
+              <span className='m-accordion__item-title'>{child[0].component_name} {child[0].constraint_type} {'Components'}</span>
+              <span className='m-accordion__item-mode' />
+            </div>
+            <div className='m-accordion__item-body collapse' id={'m_accordion_2_item_1_body' + child[0].constraint_type} role='tabpanel' aria-labelledby='m_accordion_2_item_1_head' data-parent='#m_accordion_2' style={{}}>
+              <div className='m-accordion__item-content'>
+                {childElementList}
+              </div>
+            </div>
+          </div>
+          )
+      }
+      outgoingComponentRelationshipList = function () {
+        let outgoingElements = []
+        var outgoingGroup = _.chain(outgoing)
+        .groupBy('connection_type_name')
+        .mapValues(connectionTypeGroup => _.groupBy(connectionTypeGroup, targetComponentTypeGroup => targetComponentTypeGroup.target_component_type_name))
+        .value()
+        for (let connectionKey in outgoingGroup) {
+          if (outgoingGroup.hasOwnProperty(connectionKey)) {
+            console.log(connectionKey, '-->>', outgoingGroup[connectionKey])
+            for (let targetComponentTypeKey in outgoingGroup[connectionKey]) {
+              if (outgoingGroup[connectionKey].hasOwnProperty(targetComponentTypeKey)) {
+                console.log(targetComponentTypeKey, '-->>', outgoingGroup[connectionKey][targetComponentTypeKey])
+                let childElementList = outgoingGroup[connectionKey][targetComponentTypeKey].map(function (element, i) {
+                  return (<span><a>{element.target_component_name}</a><br /></span>)
+                })
+                outgoingElements.push(
+                  <div className='m-accordion__item'>
+                    <div className='m-accordion__item-head collapsed' role='tab' id='m_accordion_2_item_1_head' data-toggle='collapse' href={'#m_accordion_2_item_1_body' + targetComponentTypeKey} aria-expanded='false'>
+                      <span className='m-accordion__item-title'>{outgoingGroup[connectionKey][targetComponentTypeKey][0].component_name} {connectionKey} {targetComponentTypeKey}</span>
+                      <span className='m-accordion__item-mode' />
+                    </div>
+                    <div className='m-accordion__item-body collapse' id={'m_accordion_2_item_1_body' + targetComponentTypeKey} role='tabpanel' aria-labelledby='m_accordion_2_item_1_head' data-parent='#m_accordion_2' style={{}}>
+                      <div className='m-accordion__item-content'>
+                        {childElementList}
+                      </div>
+                    </div>
+                  </div>
+                )
+              }
+            }
+          }
+        }
+        return outgoingElements
+      }
+      incomingComponentRelationshipList = function () {
+        var incomingGroup = _.chain(incoming)
+        .groupBy('connection_type_name')
+        .mapValues(connectionTypeGroup => _.groupBy(connectionTypeGroup, targetComponentTypeGroup => targetComponentTypeGroup.target_component_type_name))
+        .value()
+        let incomingElements = []
+        for (let connectionKey in incomingGroup) {
+          if (incomingGroup.hasOwnProperty(connectionKey)) {
+            console.log(connectionKey, '-->>', incomingGroup[connectionKey])
+            for (let targetComponentTypeKey in incomingGroup[connectionKey]) {
+              if (incomingGroup[connectionKey].hasOwnProperty(targetComponentTypeKey)) {
+                console.log(targetComponentTypeKey, '-->>', incomingGroup[connectionKey][targetComponentTypeKey])
+                let childElementList = incomingGroup[connectionKey][targetComponentTypeKey].map(function (element, i) {
+                  return (<span><a>{element.related_component_name}</a><br /></span>)
+                })
+                incomingElements.push(
+                  <div className='m-accordion__item'>
+                    <div className='m-accordion__item-head collapsed' role='tab' id='m_accordion_2_item_1_head' data-toggle='collapse' href={'#m_accordion_2_item_1_body' + targetComponentTypeKey} aria-expanded='false'>
+                      <span className='m-accordion__item-title'>{targetComponentTypeKey} {connectionKey} {incomingGroup[connectionKey][targetComponentTypeKey][0].component_name}</span>
+                      <span className='m-accordion__item-mode' />
+                    </div>
+                    <div className='m-accordion__item-body collapse' id={'m_accordion_2_item_1_body' + targetComponentTypeKey} role='tabpanel' aria-labelledby='m_accordion_2_item_1_head' data-parent='#m_accordion_2' style={{}}>
+                      <div className='m-accordion__item-content'>
+                        {childElementList}
+                      </div>
+                    </div>
+                  </div>
+                )
+              }
+            }
+          }
+        }
+        return incomingElements
+      }
     }
 
     return (
@@ -102,7 +201,10 @@ export default function ComponentTypeComponent (props) {
                           </div>
                         </div>
                       </div> */}
-                      {componentTypeComponentRelationshipsList}
+                      {parentComponentRelationshipList()}
+                      {outgoingComponentRelationshipList()}
+                      {incomingComponentRelationshipList()}
+                      {childComponentRelationshipList()}
                     </div>
                   </div>
                 </div>
@@ -122,6 +224,6 @@ export default function ComponentTypeComponent (props) {
 
 ComponentTypeComponent.propTypes = {
   componentTypeComponentData: PropTypes.any,
-  componentTypeComponentProperties: PropTypes.any,
-  componentTypeComponentRelationships: PropTypes.any
+  componentTypeComponentProperties: PropTypes.any
+  // componentTypeComponentRelationships: PropTypes.any
 }
