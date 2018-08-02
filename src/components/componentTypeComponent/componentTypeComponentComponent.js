@@ -3,6 +3,14 @@ import styles from './componentTypeComponentComponent.scss'
 import PropTypes from 'prop-types'
 import relationshipData from './mockData'
 import _ from 'lodash'
+import ComponentModelComponent from '../componentModel/componentModelComponent'
+var divStyle = {
+  width: '95%',
+  height: '30%',
+  'overflow-y': 'scroll',
+  'overflow-x': 'scroll',
+  'border': '1px solid #000000'
+}
 
 export default function ComponentTypeComponent (props) {
     let componentTypeComponentName
@@ -214,7 +222,12 @@ export default function ComponentTypeComponent (props) {
           <div className='col-sm-6 col-md-6'>
             <div className={styles.modelsection}>
               <h2>{componentTypeComponentName} Model Diagram</h2><br />
-              <img alt='model' src='https://via.placeholder.com/450x250?text=Model%20Visualization' />
+              {/* <img alt='model' src='https://via.placeholder.com/450x250?text=Model%20Visualization' /> */}
+              <div className='row'>
+                <div id='divPaperWrapper' style={divStyle}>
+                  <ComponentModelComponent relationships={componentTypeComponentRelationships} />
+                </div>
+              </div>
             </div>
           </div>
         </div>

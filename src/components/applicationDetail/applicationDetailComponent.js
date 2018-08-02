@@ -73,18 +73,6 @@ export default function ApplicationDetail (props) {
       let found = _.filter(group, {'number': currentPage})
       if (found.length > 0) { return group }
     })
-  //   paginationList = pageArray.map(function (page, index) {
-  //     if (page.number === currentPage) {
-  //       page.class = 'm-datatable__pager-link--active'
-  //     } else {
-  //       page.class = ''
-  //     }
-  //     return (<li key={index} >
-  //       <a href='javascript:void(0)' className={'m-datatable__pager-link m-datatable__pager-link-number ' + page.class} data-page={page.number} title={page.number} onClick={handlePage} >{page.number}</a>
-  //     </li>)
-  //   })
-  //   console.log('------------', pageArray)
-  //   console.log('------------ cur', currentPage)
   }
 
   let handlePrevious = function (event) {
@@ -131,16 +119,9 @@ export default function ApplicationDetail (props) {
       let found = _.filter(group, {'number': currentPage + 1})
       if (found.length > 0) { return group }
     })
-    console.log('curr page --', currentPage)
-    console.log('handle next', listPage)
-    console.log('handle next', pageArray)
-    console.log('handle slice 1', pageArray.slice(0, 4))
-    console.log('handle slice 2', pageArray.slice(4, 8))
-    console.log('handle slice 3', pageArray.slice(8))
   }
 
   let handlePage = function (page) {
-    console.log('cur page', page)
     if (page === 1) {
       previousClass = 'm-datatable__pager-link--disabled'
     } else if (page === totalNoPages) {

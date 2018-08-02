@@ -13,7 +13,7 @@ export default function Breadcrumb (props) {
     if (typeof breadcrumb.items !== 'undefined') {
       breadcrumbItems = breadcrumb.items.map(function (object, index) {
         if (object.separator) {
-          return (<li className='m-nav__separator'>-</li>)
+          return (<li key={index} className='m-nav__separator'>-</li>)
         } else {
           return (
             <li key={index} className='m-nav__item'>

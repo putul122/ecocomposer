@@ -1,6 +1,6 @@
 import React from 'react'
-// import ReactDOM from 'react-dom'
 // import joint from 'jointjs/index'
+// import ReactDOM from 'react-dom'
 import $ from 'jquery/dist/jquery'
 // import _ from 'lodash'
 import * as d3 from 'd3'
@@ -9,14 +9,8 @@ import './applicationModelComponent.scss'
 // let colors = d3.scaleOrdinal(d3.schemeCategory10)
 let width = 900
 let height = 900
-// let nodeWidth = 100
-// let nodeHeight = 50
-// let circleRadius = 2
 let diagramLayout
 let simulation
-// var divStyle = {
-//     'margin-top': '-870px'
-// }
 
 function forceInitialize (graphData) {
     diagramLayout = d3.select('#diagramLayout')
@@ -31,11 +25,9 @@ function forceInitialize (graphData) {
     function zoomed () {
         diagramLayout.attr('transform', d3.event.transform)
     }
-    // markerRefx = 35
     console.log('diagramLayout', diagramLayout)
 
     simulation = d3.forceSimulation()
-    // alphaMulti = 1
     simulation.force('link', d3.forceLink().id(function (d) {
         return d.id
       }).distance(100).strength(0))
@@ -63,7 +55,6 @@ function force (graphData) {
     linkEnter = linkEnter.data(graphData.links)
       .enter().append('g')
       .attr('class', 'links')
-      // .attr('marker-end','url(#arrowhead)')
 
     linkEnter.append('title').text(function (d) { return d.label })
     var link = diagramLayout.selectAll('.edgepath')
@@ -145,21 +136,15 @@ function force (graphData) {
 
     var nodeEnter = node.enter().append('g')
       .attr('class', 'node')
-      // .attr("height", nodeHeight)
-      // .attr("width", nodeWidth)
 
     nodeEnter.append('rect')
-      // .attr("class", "rect")
       .attr('x', -20)
       .attr('y', -20)
       .attr('rx', 10)
       .attr('width', function (node, i) { return node.width })
       .attr('height', function (node, i) { return node.height })
-    //   .attr('stroke-width', function (d) {
-    //     return Math.sqrt(2)
-    //   })
       .attr('stroke-width', 2)
-    //   .attr('stroke-opacity', '0.3')
+      //  .attr('stroke-opacity', '0.3')
       .attr('stroke', '#000000')
       .attr('fill', '#FFFFFF')
       // .style('fill', function (d, i) { return colors(i) })
