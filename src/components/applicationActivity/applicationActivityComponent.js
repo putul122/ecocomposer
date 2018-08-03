@@ -6,9 +6,7 @@ import ReactHtmlParser from 'react-html-parser'
 import messageData from './GetMessages'
 console.log('messages 22222222222222', messageData)
 export default function ApplicationActivity (props) {
-  let activityMessages = messageData.resources // props.activityMessages
-  // var grouped = _.mapValues(_.groupBy(activityMessages, 'context'), messageList => messageList.map(message => message))
-  // console.log('grouped', grouped)
+  let activityMessages = messageData.resources
   let activityMessagesList = ''
   if (activityMessages !== '') {
     activityMessagesList = activityMessages.map(function (messageGroup, index) {

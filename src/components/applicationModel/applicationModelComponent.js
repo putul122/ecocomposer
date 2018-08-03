@@ -36,7 +36,7 @@ function forceInitialize (graphData) {
       // .force("x", d3.forceX(55))
       // .force("y", d3.forceY(45))
       .force('collide', d3.forceCollide().radius(function (d) {
-        return 60
+        return 50
       }).iterations(2))
     simulation.on('end', function () {
       simulation.force('link', d3.forceLink().id(function (d) {
@@ -65,6 +65,7 @@ function force (graphData) {
         .attr('fill-opacity', 0)
         // .attr('stroke-opacity', 0.6)
         .attr('stroke', '#000')
+        .attr('stroke-width', function (d) { return d.strokeWidth })
         .attr('id', function (d, i) { return 'edgepath' + i })
         // .style('pointer-events', 'none')
 
@@ -75,8 +76,8 @@ function force (graphData) {
             .style('pointer-events', 'none')
             .attr('class', 'edgelabel')
             .attr('id', function (d, i) { return 'edgelabel' + i })
-            .attr('font-size', 12)
-            .attr('font-family', 'sans-serif')
+            .attr('font-size', function (d) { return d.fontSize })
+            .attr('font-family', function (d) { return d.fontFamily })
             .attr('fill', '#000')
 
         edgelabels.append('textPath')
@@ -143,7 +144,7 @@ function force (graphData) {
       .attr('rx', 10)
       .attr('width', function (node, i) { return node.width })
       .attr('height', function (node, i) { return node.height })
-      .attr('stroke-width', 2)
+      .attr('stroke-width', function (node, i) { return node.strokeWidth })
       //  .attr('stroke-opacity', '0.3')
       .attr('stroke', '#000000')
       .attr('fill', '#FFFFFF')
@@ -153,12 +154,13 @@ function force (graphData) {
       .text(function (d) { return d.title })
 
     nodeEnter.append('text')
-          .attr('x', function (node, i) { return ((node.width / 2) - 20) })
-          .attr('y', function (node, i) { return ((node.height / 2) - 20) })
-          .attr('dy', '.25em')
-          .attr('text-anchor', 'middle')
-          .attr('font-size', 10)
-          .attr('font-family', 'sans-serif')
+        .attr('x', function (node, i) { return ((node.width / 2) - 20) })
+        .attr('y', function (node, i) { return ((node.height / 2) - 20) })
+        .attr('dy', function (node, i) { return node.dy })
+        .attr('text-anchor', function (node, i) { return node.textAnchor })
+        .attr('font-size', function (node, i) { return node.fontSize })
+        // .attr('font-weight', function (node, i) { return node.fontWeight })
+        .attr('font-family', function (node, i) { return node.fontFamily })
         .text(function (d) { return d.name })
     // nodeIcon.call(d3.drag()
     //   .on("start", dragstarted)
@@ -301,6 +303,8 @@ class ApplicationModelComponent extends React.Component {
             let nodeData = nextProps.componentConstraints
             let leftCordinates = []
             let rightCordinates = []
+            let rightColumn = 0
+            let leftColumn = 0
             let topCordinates = []
             let downCordinates = []
             var linkArray = []
@@ -315,7 +319,13 @@ class ApplicationModelComponent extends React.Component {
             node.height = 70
             node.x = 400
             node.y = 450
+            node.strokeWidth = 4
             node.Attributes = ['']
+            node.textAnchor = 'middle'
+            node.fontSize = 20
+            node.fontWeight = 900
+            node.fontFamily = 'sans-serif'
+            node.dy = '0.25em'
             nodeArray.push(node)
             // end
 
@@ -328,6 +338,12 @@ class ApplicationModelComponent extends React.Component {
                 node.Attributes = ['']
                 node.width = 90
                 node.height = 45
+                node.strokeWidth = 3
+                node.textAnchor = 'middle'
+                node.fontSize = 10
+                node.fontWeight = 500
+                node.fontFamily = 'sans-serif'
+                node.dy = '0.25em'
                 if (data.resource.constraint_type === 'Parent') {
                     if (data.resource.name.toLowerCase() === 'can be parent of') {
                         // set down target node
@@ -335,7 +351,7 @@ class ApplicationModelComponent extends React.Component {
                         if (downLength < 1) {
                         let cor = {
                             x: 200,
-                            y: 900
+                            y: 750
                             }
                         downCordinates.push(cor)
                         node.x = cor.x
@@ -345,7 +361,7 @@ class ApplicationModelComponent extends React.Component {
                             if (typeof prevCor !== 'undefined') {
                                 let cor = {
                                     x: prevCor.x + 200,
-                                    y: 900
+                                    y: 750
                                     }
                                 downCordinates.push(cor)
                                 node.x = cor.x
@@ -358,7 +374,7 @@ class ApplicationModelComponent extends React.Component {
                         if (topLength < 1) {
                         let cor = {
                             x: 200,
-                            y: 10
+                            y: 150
                             }
                         topCordinates.push(cor)
                         node.x = cor.x
@@ -368,7 +384,7 @@ class ApplicationModelComponent extends React.Component {
                             if (typeof prevCor !== 'undefined') {
                                 let cor = {
                                     x: prevCor.x + 200,
-                                    y: 10
+                                    y: 150
                                     }
                                 topCordinates.push(cor)
                                 node.x = cor.x
@@ -405,7 +421,7 @@ class ApplicationModelComponent extends React.Component {
                         if (downLength < 1) {
                         let cor = {
                             x: 200,
-                            y: 900
+                            y: 750
                             }
                         downCordinates.push(cor)
                         node.x = cor.x
@@ -415,7 +431,7 @@ class ApplicationModelComponent extends React.Component {
                             if (typeof prevCor !== 'undefined') {
                                 let cor = {
                                     x: prevCor.x + 200,
-                                    y: 900
+                                    y: 750
                                     }
                                 downCordinates.push(cor)
                                 node.x = cor.x
@@ -428,7 +444,7 @@ class ApplicationModelComponent extends React.Component {
                         if (topLength < 1) {
                         let cor = {
                             x: 200,
-                            y: 10
+                            y: 150
                             }
                         topCordinates.push(cor)
                         node.x = cor.x
@@ -438,7 +454,7 @@ class ApplicationModelComponent extends React.Component {
                             if (typeof prevCor !== 'undefined') {
                                 let cor = {
                                     x: prevCor.x + 200,
-                                    y: 10
+                                    y: 150
                                     }
                                 topCordinates.push(cor)
                                 node.x = cor.x
@@ -449,18 +465,19 @@ class ApplicationModelComponent extends React.Component {
                         let rightLength = rightCordinates.length
                         if (rightLength < 1) {
                             let cor = {
-                                x: 800,
+                                x: 800 + (rightColumn * 150),
                                 y: 300
                                 }
                             rightCordinates.push(cor)
                             node.x = cor.x
                             node.y = cor.y
                         } else {
+                            rightColumn = Math.floor(rightLength / 5)
                             let prevCor = rightCordinates[rightLength - 1]
                             if (typeof prevCor !== 'undefined') {
                                 let cor = {
-                                    x: 800,
-                                    y: prevCor.y + 100
+                                    x: 800 + (rightColumn * 120),
+                                    y: (prevCor.y + 100 < 800) ? prevCor.y + 100 : 300
                                 }
                                 rightCordinates.push(cor)
                                 node.x = cor.x
@@ -473,18 +490,19 @@ class ApplicationModelComponent extends React.Component {
                     let leftLength = leftCordinates.length
                     if (leftLength < 1) {
                         let cor = {
-                            x: 10,
+                            x: 10 - (leftColumn * 150),
                             y: 300
                             }
                         leftCordinates.push(cor)
                         node.x = cor.x
                         node.y = cor.y
                     } else {
+                        leftColumn = Math.floor(leftLength / 5)
                         let prevCor = leftCordinates[leftLength - 1]
                         if (typeof prevCor !== 'undefined') {
                             let cor = {
-                                x: 10,
-                                y: prevCor.y + 100
+                                x: 10 - (leftColumn * 150),
+                                y: (prevCor.y + 100 < 800) ? prevCor.y + 100 : 300
                                 }
                             leftCordinates.push(cor)
                             node.x = cor.x
@@ -496,18 +514,19 @@ class ApplicationModelComponent extends React.Component {
                     let rightLength = rightCordinates.length
                     if (rightLength < 1) {
                         let cor = {
-                            x: 800,
+                            x: 800 + (rightColumn * 150),
                             y: 300
                             }
                         rightCordinates.push(cor)
                         node.x = cor.x
                         node.y = cor.y
                     } else {
+                        rightColumn = Math.floor(rightLength / 5)
                         let prevCor = rightCordinates[rightLength - 1]
                         if (typeof prevCor !== 'undefined') {
                             let cor = {
-                                x: 800,
-                                y: prevCor.y + 100
+                                x: 800 + (rightColumn * 120),
+                                y: (prevCor.y + 100 < 800) ? prevCor.y + 100 : 300
                             }
                             rightCordinates.push(cor)
                             node.x = cor.x
@@ -523,6 +542,9 @@ class ApplicationModelComponent extends React.Component {
                 // link.Title = data.resource.name;
                 link.type = data.resource.name
                 link.direction = 'output'
+                link.strokeWidth = 1.2
+                link.fontFamily = 'sans-serif'
+                link.fontSize = 12
                 if (data.resource.constraint_type === 'Parent') {  // down
                     link.source = 0
                     link.target = index
