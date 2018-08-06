@@ -1,24 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import ApplicationActivity from '../../containers/applicationActivity/applicationActivityContainer'
-// import { Navbar, Nav, NavItem } from 'react-bootstrap'
-// import styles from './headerComponent.scss'
-// import FontAwesome from 'react-fontawesome'
-// import Modal from 'react-modal'
-// const customStyles = {
-//   content: {
-//     top: '80%',
-//     left: '70%',
-//     right: 'auto',
-//     bottom: 'auto',
-//     transform: 'translate(0%, -60%)'
-//   }
-// }
 
 export default function HeaderComponent (props) {
   let isQuickSlideOpen = props.isQuickSlideOpen
   let quickSlideClass = 'm-quick-sidebar--off'
-  console.log('header props', props)
+  let isLoginSlideOpen = props.isLoginSlideOpen
+  let loginSlideClass = 'm-dropdown--close'
+  console.log('header props----------------------------', props)
+  // console.log('isLoginSlideOpen', isLoginSlideOpen)
 
   if (isQuickSlideOpen) {
     quickSlideClass = 'm-quick-sidebar--on'
@@ -39,14 +29,26 @@ export default function HeaderComponent (props) {
     props.setQuickslideFlag(false)
   }
 
-  // let openModal = function (event) {
-  //   event.preventDefault()
-  //   props.setModalOpenStatus(true)
-  // }
+  if (isLoginSlideOpen) {
+    loginSlideClass = 'm-dropdown--open'
+  } else {
+    loginSlideClass = ''
+  }
+  let openLoginSlide = function (event) {
+    // alert('HIII')
+    event.preventDefault()
+    console.log(' open login', props)
+    loginSlideClass = 'm-dropdown--open'
+    props.setLoginslideFlag(true)
+  }
 
-  // let closeModal = function () {
-  //   props.setModalOpenStatus(false)
-  // }
+  let closeLoginSlide = function (event) {
+    event.preventDefault()
+    console.log(' close login', props)
+    loginSlideClass = 'm-dropdown--close'
+    props.setLoginslideFlag(false)
+  }
+
   return (
     <div>
       <header id='m_header' className='m-grid__item    m-header ' m-minimize-offset='200' m-minimize-mobile-offset='200' >
@@ -56,8 +58,8 @@ export default function HeaderComponent (props) {
             <div className='m-stack__item m-brand '>
               <div className='m-stack m-stack--ver m-stack--general'>
                 <div className='m-stack__item m-stack__item--middle m-brand__logo'>
-                  <a href='index.html' className='m-brand__logo-wrapper'>
-                    <img alt='' src='assets/demo/demo7/media/img/logo/logo.png' />
+                  <a href='index.html' className=''>
+                    <img alt='' src='/assets/ECO Conductor.png' width='60px' height='60px' />
                   </a>
                 </div>
                 <div className='m-stack__item m-stack__item--middle m-brand__tools'>
@@ -89,7 +91,7 @@ export default function HeaderComponent (props) {
                 <div className='m-stack__item m-topbar__nav-wrapper'>
                   <ul className='m-topbar__nav m-nav m-nav--inline'>
                     <li className='m-nav__item m-topbar__notifications m-dropdown m-dropdown--large m-dropdown--arrow m-dropdown--align-center m-dropdown--mobile-full-width m-dropdown--open' id='search-container' >
-                      <a href='' className='m-nav__link m-dropdown__toggle' id='m_topbar_notification_icon' onClick={openQuickSlide} >
+                      <a href='' className='m-nav__link m-dropdown__toggle' onClick={openQuickSlide} id='m_topbar_notification_icon'>
                         <span className='m-nav__link-icon m-topbar__usericon'>
                           <span className='m-nav__link-icon-wrapper'><i className='flaticon-music-2' /></span>
                         </span>
@@ -102,8 +104,8 @@ export default function HeaderComponent (props) {
                         </Modal> */}
                       </div>
                     </li>
-                    <li className='m-nav__item m-topbar__user-profile  m-dropdown m-dropdown--medium m-dropdown--arrow  m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light' >
-                      <a href='' className='m-nav__link m-dropdown__toggle'>
+                    <li className={'m-nav__item m-topbar__user-profile  m-dropdown  m-dropdown--medium m-dropdown--arrow  m-dropdown--align-right  m-dropdown--mobile-full-width m-dropdown--skin-light ' + loginSlideClass}>
+                      <a href='' className='m-nav__link' onClick={openLoginSlide}>
                         <span className='m-topbar__userpic m--hide'>
                           <img src='assets/app/media/img/users/user4.jpg' className='m--img-rounded m--marginless m--img-centered' alt='' />
                         </span>
@@ -115,21 +117,21 @@ export default function HeaderComponent (props) {
                       <div className='m-dropdown__wrapper'>
                         <span className='m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust' />
                         <div className='m-dropdown__inner'>
-                          <div className='m-dropdown__header m--align-center'>
-                            <div className='m-card-user m-card-user--skin-light'>
-                              <div className='m-card-user__pic'>
+                          <div className='m--align-right'>
+                            <div className='m-card-user--skin-light'>
+                              {/* <div className='m-card-user__pic'>
                                 <img src='assets/app/media/img/users/user4.jpg' className='m--img-rounded m--marginless' alt='' />
-                              </div>
-                              <div className='m-card-user__details'>
-                                <span className='m-card-user__name m--font-weight-500'>Mark Andre</span>
-                                <a href='' className='m-card-user__email m--font-weight-300 m-link'>mark.andre@gmail.com</a>
+                              </div> */}
+                              <div className=' '>
+                                {/* <span className='m-card-user__name m--font-weight-500'>Mark Andre</span> */}
+                                <a href='' onClick={closeLoginSlide} ><i className='la la-close' /></a>
                               </div>
                             </div>
                           </div>
                           <div className='m-dropdown__body'>
                             <div className='m-dropdown__content'>
                               <ul className='m-nav m-nav--skin-light'>
-                                <li className='m-nav__section m--hide'>
+                                {/* <li className='m-nav__section m--hide'>
                                   <span className='m-nav__section-text'>Section</span>
                                 </li>
                                 <li className='m-nav__item'>
@@ -168,7 +170,7 @@ export default function HeaderComponent (props) {
                                     <span className='m-nav__link-text'>Support</span>
                                   </a>
                                 </li>
-                                <li className='m-nav__separator m-nav__separator--fit' />
+                                <li className='m-nav__separator m-nav__separator--fit' /> */}
                                 <li className='m-nav__item'>
                                   <a href='snippets/pages/user/login-1.html' className='btn m-btn--pill    btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder'>Logout</a>
                                 </li>
@@ -240,5 +242,7 @@ HeaderComponent.propTypes = {
   // modalIsOpen: PropTypes.any,
   // setModalOpenStatus: PropTypes.func,
   isQuickSlideOpen: PropTypes.any,
-  setQuickslideFlag: PropTypes.func
+  isLoginSlideOpen: PropTypes.any,
+  // setQuickslideFlag: PropTypes.func,
+  setLoginslideFlag: PropTypes.func
 }

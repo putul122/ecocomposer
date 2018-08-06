@@ -6,6 +6,7 @@ const DECREMENT = 'BasicReducer/DECREMENT'
 const SET_MODAL_OPEN_STATUS = 'BasicReducer/SET_MODAL_OPEN_STATUS'
 const SET_CURRENT_PAGE = 'BasicReducer/SET_CURRENT_PAGE'
 const SET_QUICKSLIDE_FLAG = 'BasicReducer/SET_QUICKSLIDE_FLAG'
+const SET_LOGINSLIDE_FLAG = 'BasicReducer/SET_LOGINSLIDE_FLAG'
 const SET_BREADCRUMB = 'BasicReducer/SET_BREADCRUMB'
 
 export const actions = {
@@ -15,6 +16,7 @@ export const actions = {
   SET_MODAL_OPEN_STATUS,
   SET_CURRENT_PAGE,
   SET_QUICKSLIDE_FLAG,
+  SET_LOGINSLIDE_FLAG,
   SET_BREADCRUMB
 }
 
@@ -24,6 +26,7 @@ export const actionCreators = {
   setModalOpenStatus: createAction(SET_MODAL_OPEN_STATUS),
   setCurrentPage: createAction(SET_CURRENT_PAGE),
   setQuickslideFlag: createAction(SET_QUICKSLIDE_FLAG),
+  setLoginslideFlag: createAction(SET_LOGINSLIDE_FLAG),
   setBreadcrumb: createAction(SET_BREADCRUMB)
 }
 
@@ -33,6 +36,7 @@ export const initialState = {
   modalIsOpen: false,
   currentPage: 1,
   isQuickSlideOpen: false,
+  isLoginSlideOpen: false,
   breadcrumb: ''
 }
 
@@ -61,6 +65,10 @@ export default handleActions(
     [SET_QUICKSLIDE_FLAG]: (state, action) => ({
       ...state,
       isQuickSlideOpen: action.payload
+    }),
+    [SET_LOGINSLIDE_FLAG]: (state, action) => ({
+      ...state,
+      isLoginSlideOpen: action.payload
     }),
     [SET_BREADCRUMB]: (state, action) => ({
       ...state,

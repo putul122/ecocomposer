@@ -4,9 +4,9 @@ import { createAction } from 'redux-actions'
 import api from '../../../constants'
 
 // Saga action strings
-export const ACTIVITY_MESSAGE = 'saga/Register/ACTIVITY_MESSAGE'
-export const ACTIVITY_MESSAGE_SUCCESS = 'saga/Register/ACTIVITY_MESSAGE_SUCCESS'
-export const ACTIVITY_MESSAGE_FAILURE = 'saga/Register/ACTIVITY_MESSAGE_FAILURE'
+export const ACTIVITY_MESSAGE = 'saga/Login/ACTIVITY_MESSAGE'
+export const ACTIVITY_MESSAGE_SUCCESS = 'saga/Login/ACTIVITY_MESSAGE_SUCCESS'
+export const ACTIVITY_MESSAGE_FAILURE = 'saga/Login/ACTIVITY_MESSAGE_FAILURE'
 
 export const actionCreators = {
   activityMessage: createAction(ACTIVITY_MESSAGE),

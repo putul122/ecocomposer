@@ -5,7 +5,7 @@ import { actions as sagaActions } from '../../redux/sagas/'
 // Global State
 export function mapStateToProps (state, props) {
   return {
-    isLoggedin: state.registerReducer.isLoggedin,
+    isLoggedin: state.loginReducer.isLoggedin,
     activityMessages: state.applicationActivityReducer.activityMessages,
     selectedComponentType: state.applicationDetailReducer.selectedComponentType
   }

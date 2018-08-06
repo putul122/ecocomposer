@@ -1,14 +1,14 @@
 import React from 'react'
 // import styles from './appWrapperComponent.scss'
-import HeaderComponent from '../header/headerComponent'
-import FooterComponent from '../footer/footerComponent'
+// import HeaderComponent from '../header/headerComponent'
+// import FooterComponent from '../footer/footerComponent'
 
 class AppWrapper extends React.Component {
   render () {
     return (
       <div>
-        <HeaderComponent />
-        <FooterComponent />
+        {/* <HeaderComponent />
+        <FooterComponent /> */}
         {this.props.children}
       </div>
     )
